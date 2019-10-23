@@ -1,0 +1,53 @@
+@page "/login"
+@layout LoginLayout
+@inject NavigationManager  navigationManager
+@inject IdentityAuthenticationStateProvider authStateProvider
+
+<h1 class="h2 font-weight-normal login-tittle">
+    Blazor with Myvas.AspNetCore.Authentication
+</h1>
+
+<EditForm class="form-signin" OnValidSubmit="OnSubmit" Model="loginParameters">
+    <DataAnnotationsValidator />
+    <h4 class="font-weight-normal text-center">Login</h4>
+
+    <label for="inputUsername" class="sr-only">User Name</label>
+    <InputText id="inputUsername" class="form-control" @bind-Value="loginParameters.Key" autofocus placeholder="PhoneNumber/Email/Username/Idcard/FullName" />
+    <ValidationMessage For="@(() => loginParameters.Key)" />
+
+    <label for="inputPassword" class="sr-only">Password</label>
+    <InputText type="password" id="inputPassword" class="form-control" placeholder="Password" @bind-Value="loginParameters.Password" />
+    <ValidationMessage For="@(() => loginParameters.Password)" />
+
+    <div class="form-check m-3">
+        <InputCheckbox id="inputRememberMe" class="form-check-input" @bind-Value="@loginParameters.RememberMe" />
+        <label class="form-check-label" for="inputRememberMe">Remember Me</label>
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+    <label class="text-danger">@error</label>
+
+    <NavLink href="register">
+        <h6 class="font-weight-normal text-center">Create account</h6>
+    </NavLink>
+</EditForm>
+
+@code {
+    LoginInputModel loginParameters { get; set; } = new LoginInputModel();
+    string error { get; set; }
+
+    async Task OnSubmit()
+    {
+        error = null;
+        try
+        {
+            await authStateProvider.Login(loginParameters);
+            navigationManager.NavigateTo("");
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}

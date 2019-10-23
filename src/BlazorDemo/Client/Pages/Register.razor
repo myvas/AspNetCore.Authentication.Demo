@@ -1,0 +1,52 @@
+@page "/register"
+@layout LoginLayout
+@inject NavigationManager navigationManager
+@inject IdentityAuthenticationStateProvider authStateProvider
+
+<h1 class="h2 font-weight-normal login-title">
+    Blazor with Myvas.AspNetCore.Authentication
+</h1>
+
+<EditForm class="form-signin" OnValidSubmit="OnSubmit" Model="registerParameters">
+    <DataAnnotationsValidator />
+    <h4 class="font-weight-normal text-center">Create Account</h4>
+
+    <label for="inputUsername" class="sr-only">User Name</label>
+    <InputText id="inputUsername" class="form-control" placeholder="Username" autofocus @bind-Value="@registerParameters.UserName" />
+    <ValidationMessage For="@(() => registerParameters.UserName)" />
+
+    <label for="inputPassword" class="sr-only">Password</label>
+    <InputText type="password" id="inputPassword" class="form-control" placeholder="Password" @bind-Value="@registerParameters.Password" />
+    <ValidationMessage For="@(() => registerParameters.Password)" />
+
+    <label for="inputPasswordConfirm" class="sr-only">Password Confirmation</label>
+    <InputText type="password" id="inputPasswordConfirm" class="form-control" placeholder="Password Confirmation" @bind-Value="@registerParameters.PasswordConfirm" />
+    <ValidationMessage For="@(() => registerParameters.PasswordConfirm)" />
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Create account</button>
+
+    <label class="text-danger">@error</label>
+    <NavLink href="login">
+        <h6 class="font-weight-normal text-center">Already have an account? Click here to login</h6>
+    </NavLink>
+</EditForm>
+
+@code {
+
+    RegisterInputModel registerParameters { get; set; } = new RegisterInputModel();
+    string error { get; set; }
+
+    async Task OnSubmit()
+    {
+        error = null;
+        try
+        {
+            await authStateProvider.Register(registerParameters);
+            navigationManager.NavigateTo("");
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+}

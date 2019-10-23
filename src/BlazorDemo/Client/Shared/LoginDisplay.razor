@@ -1,0 +1,43 @@
+﻿@inject NavigationManager navigationManager
+@inject IdentityAuthenticationStateProvider authStateProvider
+
+<div class="user-info">
+    <AuthorizeView>
+        <Authorizing>
+            <text>...</text>
+        </Authorizing>
+        <Authorized>
+            <img src="img/user.svg" />
+            <div>
+                <a href="Identity/Account/Manage">Hello, @UserName!</a>
+                <button type="button" class="btn btn-link ml-md-auto" @onclick="@LogoutClick">Logout</button>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <a href="/register">Register</a>
+            <MatBlazor.MatButton Outlined="true" Link="/login">Login</MatBlazor.MatButton>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> AuthenticationState { get; set; }
+
+    string UserName;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var identity = (await AuthenticationState).User.Identity;
+        if (identity.IsAuthenticated)
+        {
+            UserName = identity.IsAuthenticated ? identity.Name : "(Anonymous)";
+        }
+    }
+
+    async Task LogoutClick()
+    {
+        await authStateProvider.Logout();
+        navigationManager.NavigateTo("/login");
+    }
+}

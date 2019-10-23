@@ -1,0 +1,28 @@
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
+            <NotAuthorized>
+                <div>
+                    <h2>You're signed out</h2>
+                    <p>To continue, please login.</p>
+                    <a class="btn btn-danger" href="/login">Login</a>
+                </div>
+            </NotAuthorized>
+            <Authorizing>
+                <div>Please wait...</div>
+            </Authorizing>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <div class="alert alert-secondary mt-4" role="alert">
+                <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+                <strong>404</strong>
+
+                <span class="text-nowrap">
+                    Page not found
+                </span>
+            </div>
+        </LayoutView>
+    </NotFound>
+</Router>
