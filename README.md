@@ -5,11 +5,11 @@ Demo of a series of authentication client middlewares:
 - QQConnect for https://connect.qq.com
 
 ## NuGet
-https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth
-https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinOpen
-https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.QQConnect
-https://www.nuget.org/packages/Myvas.AspNetCore.TencentSms
-https://www.nuget.org/packages/Myvas.AspNetCore.Email
+- https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth
+- https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinOpen
+- https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.QQConnect
+- https://www.nuget.org/packages/Myvas.AspNetCore.TencentSms
+- https://www.nuget.org/packages/Myvas.AspNetCore.Email
 
 ## Demo Online
 - http://demo.auth.myvas.com (debian.9-x64)
