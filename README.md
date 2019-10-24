@@ -23,7 +23,7 @@ This repo deployed on http://demo.auth.myvas.com (debian.9-x64)
 ## 微信开放平台 WeixinOpen https://open.weixin.qq.com
 
 (TODO:在此添加配置说明)
-[![Screenshot](assets/secrets-WeixinOpen.png)]
+![Screenshot](assets/secrets-WeixinOpen.png)
 
 ## 微信公众平台 WeixinAuth https://mp.weixin.qq.com
 
@@ -38,11 +38,11 @@ This repo deployed on http://demo.auth.myvas.com (debian.9-x64)
 - 设置好网页授权域名：例如，demo.auth.myvas.com。
 - 将文件MP_verify_xxxxxxxxx.txt上传至wwwroot目录下。
 
-[![Screenshot](assets/secrets-WeixinAuth.png)]
+![Screenshot](assets/secrets-WeixinAuth.png)
 
 ## QQ开放平台配置 QQConnect https://connect.qq.com
 
 (TODO:在此添加配置说明)
 
-[![Screenshot](assets/secrets-QQConnect.png)]
+![Screenshot](assets/secrets-QQConnect.png)
 
