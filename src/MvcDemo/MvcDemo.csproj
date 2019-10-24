@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.0" />
     <PackageReference Include="Myvas.AspNetCore.Authentication.QQConnect" Version="2.2.1025" />
-    <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinAuth" Version="2.1.508" />
+    <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinAuth" Version="2.2.1026" />
     <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinOpen" Version="2.2.1025" />
     <PackageReference Include="Myvas.AspNetCore.TencentSms" Version="2.1.404" />
     <PackageReference Include="Myvas.AspNetCore.ViewDivert" Version="2.1.507" />
