@@ -3,12 +3,12 @@ This repo deployed on http://demo.auth.myvas.com (debian.9-x64)
 
 ## Components:
 
-- Myvas.AspNetCore.Authentication.WeixinAuth [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Authentication.WeixinOpen.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth) [github](https://github.com/myvas/AspNetCore.Authentication.WeixinAuth)
-- Myvas.AspNetCore.Authentication.WeixinOpen [nuget](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinOpen) [github](https://github.com/myvas/AspNetCore.Authentication.WeixinOpen)
-- Myvas.AspNetCore.Authentication.QQConnect [nuget](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.QQConnect) [github](https://github.com/myvas/AspNetCore.Authentication.QQConnect)
-- Myvas.AspNetCore.TencentSms [nuget](https://www.nuget.org/packages/Myvas.AspNetCore.TencentSms) [github](https://github.com/myvas/AspNetCore.Authentication.TencentSms)
-- Myvas.AspNetCore.Email [nuget](https://www.nuget.org/packages/Myvas.AspNetCore.Email) [github](https://github.com/myvas/AspNetCore.Authentication.Email)
-- Myvas.AspNetCore.ViewDivert [nuget](https://www.nuget.org/packages/Myvas.AspNetCore.ViewDivert) [github](https://github.com/myvas/AspNetCore.Authentication.ViewDivert)
+- Myvas.AspNetCore.Authentication.WeixinAuth [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Authentication.WeixinAuth.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth) [[github]](https://github.com/myvas/AspNetCore.Authentication.WeixinAuth)
+- Myvas.AspNetCore.Authentication.WeixinOpen [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Authentication.WeixinOpen.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinOpen) [[github]](https://github.com/myvas/AspNetCore.Authentication.WeixinOpen)
+- Myvas.AspNetCore.Authentication.QQConnect [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Authentication.QQConnect.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.QQConnect) [[github]](https://github.com/myvas/AspNetCore.Authentication.QQConnect)
+- Myvas.AspNetCore.TencentSms [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.TencentSms.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.TencentSms) [github](https://github.com/myvas/AspNetCore.TencentSms)
+- Myvas.AspNetCore.Email [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Email.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Email) [[github]](https://github.com/myvas/AspNetCore.Email)
+- Myvas.AspNetCore.ViewDivert [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.ViewDivert.svg](https://www.nuget.org/packages/Myvas.AspNetCore.ViewDivert) [[github]](https://github.com/myvas/AspNetCore.ViewDivert)
 
 ## Qrcode to enter the demo weixin service account:
 
