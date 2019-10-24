@@ -3,7 +3,7 @@ This repo deployed on http://demo.auth.myvas.com (debian.9-x64)
 
 ## Components:
 
-- Myvas.AspNetCore.Authentication.WeixinAuth [nuget](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth) [github](https://github.com/myvas/AspNetCore.Authentication.WeixinAuth)
+- Myvas.AspNetCore.Authentication.WeixinAuth [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Authentication.WeixinOpen.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth) [github](https://github.com/myvas/AspNetCore.Authentication.WeixinAuth)
 - Myvas.AspNetCore.Authentication.WeixinOpen [nuget](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinOpen) [github](https://github.com/myvas/AspNetCore.Authentication.WeixinOpen)
 - Myvas.AspNetCore.Authentication.QQConnect [nuget](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.QQConnect) [github](https://github.com/myvas/AspNetCore.Authentication.QQConnect)
 - Myvas.AspNetCore.TencentSms [nuget](https://www.nuget.org/packages/Myvas.AspNetCore.TencentSms) [github](https://github.com/myvas/AspNetCore.Authentication.TencentSms)
