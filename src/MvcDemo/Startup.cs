@@ -58,13 +58,13 @@ namespace Demo
                     options.AppSecret = Configuration["WeixinOpen:AppSecret"];
                     options.SaveTokens = true;
                 })
-                //.AddWeixinAuth(options =>
-                //{
-                //    options.AppId = Configuration["WeixinAuth:AppId"];
-                //    options.AppSecret = Configuration["WeixinAuth:AppSecret"];
-                //    options.SilentMode = false; //不采用静默模式
-                //                                //options.SaveTokens = true;
-                //})
+                .AddWeixinAuth(options =>
+                {
+                    options.AppId = Configuration["WeixinAuth:AppId"];
+                    options.AppSecret = Configuration["WeixinAuth:AppSecret"];
+                    options.SilentMode = false; //不采用静默模式
+                                                //options.SaveTokens = true;
+                })
                 .AddQQConnect(options =>
                 {
                     options.AppId = Configuration["QQConnect:AppId"];
