@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Myvas.AspNetCore.Authentication;
 
 namespace Demo
@@ -53,12 +52,12 @@ namespace Demo
             });
 
             services.AddAuthentication()
-                //.AddWeixinOpen(options =>
-                //{
-                //    options.AppId = Configuration["WeixinOpen:AppId"];
-                //    options.AppSecret = Configuration["WeixinOpen:AppSecret"];
-                //    options.SaveTokens = true;
-                //})
+                .AddWeixinOpen(options =>
+                {
+                    options.AppId = Configuration["WeixinOpen:AppId"];
+                    options.AppSecret = Configuration["WeixinOpen:AppSecret"];
+                    options.SaveTokens = true;
+                })
                 //.AddWeixinAuth(options =>
                 //{
                 //    options.AppId = Configuration["WeixinAuth:AppId"];
@@ -86,12 +85,13 @@ namespace Demo
             });
 
             services.AddViewDivert();
+            services.AddAuthorization();
 
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -104,16 +104,17 @@ namespace Demo
 
             app.UseStaticFiles();
 
-            app.UseRouting();
+            //app.UseRouting();
             app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            //app.UseAuthorization();
+            
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+            //});
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

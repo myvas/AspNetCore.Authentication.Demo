@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Myvas.AspNetCore.Authentication;
 using Myvas.AspNetCore.TencentSms;
 using System;
 using System.Security.Claims;
@@ -36,7 +35,7 @@ namespace Demo.Controllers
 
             if (DeviceResolver.IsMicroMessenger(HttpContext))
             {
-                return ExternalLogin(WeixinAuthDefaults.AuthenticationScheme, returnUrl);
+                //return ExternalLogin(WeixinAuthDefaults.AuthenticationScheme, returnUrl);
             }
 
             var vm = new LoginViewModel();

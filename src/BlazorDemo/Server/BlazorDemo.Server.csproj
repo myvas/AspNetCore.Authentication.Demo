@@ -19,7 +19,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Myvas.AspNetCore.Authentication.QQConnect" Version="2.1.802" />
     <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinAuth" Version="2.1.802" />
-    <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinOpen" Version="2.1.802" />
+    <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinOpen" Version="2.1.803-alpha5" />
     <PackageReference Include="Myvas.AspNetCore.TencentSms" Version="2.1.404" />
   </ItemGroup>
 
