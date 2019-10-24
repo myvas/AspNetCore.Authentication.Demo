@@ -5,9 +5,6 @@
     <UserSecretsId>Myvas.AspNetCore.Authentication.Demo</UserSecretsId>
     <RootNamespace>Demo</RootNamespace>
     <AssemblyName>Demo</AssemblyName>
-    <Version>2.2.1024.11</Version>
-    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
   </PropertyGroup>
 
   <ItemGroup>
