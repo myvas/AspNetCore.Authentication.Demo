@@ -16,18 +16,20 @@ namespace Demo
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args)
+            CreateHostBuilder(args).Build()
                 .MigrateDatabase()
                 .SeedDatabase()
                 .Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration( ConfigureAppConfiguration)
-                .ConfigureLogging(ConfigureLogging)
-                .UseStartup<Startup>()
-                .Build();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.ConfigureAppConfiguration(ConfigureAppConfiguration)
+                    .ConfigureLogging(ConfigureLogging)
+                    .UseStartup<Startup>();
+            });
 
         private static void ConfigureAppConfiguration(WebHostBuilderContext hostingContext, IConfigurationBuilder config)
         {
