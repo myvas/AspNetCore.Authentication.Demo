@@ -3,7 +3,7 @@ This repo deployed on http://demo.auth.myvas.com (debian.9-x64)
 
 ## Components:
 
-- Myvas.AspNetCore.Authentication.WeixinAuth [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Authentication.WeixinAuth.svg) ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Myvas.AspNetCore.Authentication.WeixinAuth)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth) [![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/myvas/AspNetCore.Authentication.WeixinAuth?label=github)](https://github.com/myvas/AspNetCore.Authentication.WeixinAuth)
+- Myvas.AspNetCore.Authentication.WeixinAuth [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Authentication.WeixinAuth.svg) ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Myvas.AspNetCore.Authentication.WeixinAuth?label=)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth) [![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/myvas/AspNetCore.Authentication.WeixinAuth?label=github)](https://github.com/myvas/AspNetCore.Authentication.WeixinAuth)
 
 - Myvas.AspNetCore.Authentication.WeixinOpen [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Authentication.WeixinOpen.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinOpen) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Myvas.AspNetCore.Authentication.WeixinOpen)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinOpen) [![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/myvas/AspNetCore.Authentication.WeixinOpen?label=github)](https://github.com/myvas/AspNetCore.Authentication.WeixinOpen)
 
