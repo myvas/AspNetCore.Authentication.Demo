@@ -1,16 +1,17 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 
 namespace Demo.Data
 {
-    public static class WebHostDatabaseExtensions
+    public static class HostDatabaseExtensions
     {
-        public static IWebHost MigrateDatabase(this IWebHost webHost)
+        public static IHost MigrateDatabase(this IHost host)
         {
-            using (var scope = webHost.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
 
@@ -26,12 +27,12 @@ namespace Demo.Data
                 }
             }
 
-            return webHost;
+            return host;
         }
 
-        public static IWebHost SeedDatabase(this IWebHost webHost)
+        public static IHost SeedDatabase(this IHost host)
         {
-            using (var scope = webHost.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
 
@@ -46,7 +47,7 @@ namespace Demo.Data
                 }
             }
 
-            return webHost;
+            return host;
         }
     }
 
