@@ -1,13 +1,10 @@
-﻿using Myvas.AspNetCore.Authentication.WeixinOpen;
-using Demo.Models;
+﻿using Demo.Models;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
