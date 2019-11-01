@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UserSecretsId>Myvas.AspNetCore.Authentication.Demo</UserSecretsId>
     <RootNamespace>Demo</RootNamespace>
-    <AssemblyName>Demo</AssemblyName>
+    <AssemblyName>Demo</AssemblyName>    
     <Version>3.0.100.1025</Version>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
@@ -17,6 +17,7 @@
     <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinOpen" Version="3.0.100-alpha3" />
     <PackageReference Include="Myvas.AspNetCore.TencentSms" Version="2.1.404" />
     <PackageReference Include="Myvas.AspNetCore.ViewDivert" Version="2.1.507" />
+    <PackageReference Include="Myvas.AspNetCore.Weixin.Jssdk" Version="2.2.403" />
   </ItemGroup>
 
   <ItemGroup>
