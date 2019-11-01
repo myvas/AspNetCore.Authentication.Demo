@@ -15,6 +15,9 @@ namespace Demo
 
         public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
 
+        public DbSet<WeixinSubscriber> Subscribers { get; set; }
+        public DbSet<ReceivedTextMessage> ReceivedTextMessages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

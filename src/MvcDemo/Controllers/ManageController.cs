@@ -51,7 +51,7 @@ namespace Demo.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var model = new IndexViewModel
+            var model = new ManageIndexViewModel
             {
                 Username = user.UserName,
                 PhoneNumber = user.PhoneNumber,
@@ -64,7 +64,7 @@ namespace Demo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(IndexViewModel model)
+        public async Task<IActionResult> Index(ManageIndexViewModel model)
         {
             if (!ModelState.IsValid)
             {

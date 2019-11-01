@@ -1,3 +1,4 @@
+using Demo.Applications;
 using Demo.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Myvas.AspNetCore.Authentication;
+using Myvas.AspNetCore.Weixin;
 
 namespace Demo
 {
@@ -86,8 +88,42 @@ namespace Demo
             });
 
             services.AddViewDivert();
-            services.AddAuthorization();
-
+            services.AddWeixinAccessToken(options =>
+            {
+                options.AppId = Configuration["Weixin:AppId"];
+                options.AppSecret = Configuration["Weixin:AppSecret"];
+            });
+            services.AddWeixinJssdk(options =>
+            {
+                options.AppId = Configuration["Weixin:AppId"];
+            });
+            services.AddScoped<IWeixinEventSink, WeixinEventSink>();
+            var weixinEventSink = services.BuildServiceProvider().GetRequiredService<IWeixinEventSink>();
+            services.AddWeixinWelcomePage(options =>
+            {
+                options.AppId = Configuration["Weixin:AppId"];
+                options.AppSecret = Configuration["Weixin:AppSecret"];
+                options.WebsiteToken = Configuration["Weixin:WebsiteToken"];
+                options.EncodingAESKey = Configuration["Weixin:EncodingAESKey"];
+                options.Path = "/wx";
+                options.Events = new WeixinMessageEvents()
+                {
+                    OnTextMessageReceived = ctx => weixinEventSink.OnTextMessageReceived(ctx.Sender, ctx.Args),
+                    OnLinkMessageReceived = ctx => weixinEventSink.OnLinkMessageReceived(ctx.Sender, ctx.Args),
+                    OnClickMenuEventReceived = ctx => weixinEventSink.OnClickMenuEventReceived(ctx.Sender, ctx.Args),
+                    OnImageMessageReceived = ctx => weixinEventSink.OnImageMessageReceived(ctx.Sender, ctx.Args),
+                    OnLocationEventReceived = ctx => weixinEventSink.OnLocationEventReceived(ctx.Sender, ctx.Args),
+                    OnLocationMessageReceived = ctx => weixinEventSink.OnLocationMessageReceived(ctx.Sender, ctx.Args),
+                    OnQrscanEventReceived = ctx => weixinEventSink.OnQrscanEventReceived(ctx.Sender, ctx.Args),
+                    OnSubscribeEventReceived = ctx => weixinEventSink.OnSubscribeEventReceived(ctx.Sender, ctx.Args),
+                    OnUnsubscribeEventReceived = ctx => weixinEventSink.OnUnsubscribeEventReceived(ctx.Sender, ctx.Args),
+                    OnVideoMessageReceived = ctx => weixinEventSink.OnVideoMessageReceived(ctx.Sender, ctx.Args),
+                    OnShortVideoMessageReceived = ctx => weixinEventSink.OnShortVideoMessageReceived(ctx.Sender, ctx.Args),
+                    OnViewMenuEventReceived = ctx => weixinEventSink.OnViewMenuEventReceived(ctx.Sender, ctx.Args),
+                    OnVoiceMessageReceived = ctx => weixinEventSink.OnVoiceMessageReceived(ctx.Sender, ctx.Args)
+                };
+            });
+          
             services.AddControllersWithViews();
         }
 
@@ -111,6 +147,8 @@ namespace Demo
             app.UseAuthentication();
 
             app.UseAuthorization();
+          
+            app.UseWeixinWelcomePage();
 
             app.UseEndpoints(endpoints =>
             {
