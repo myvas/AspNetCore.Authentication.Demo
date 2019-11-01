@@ -15,8 +15,9 @@
     <PackageReference Include="Myvas.AspNetCore.Authentication.QQConnect" Version="3.0.100-alpha1" />
     <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinAuth" Version="3.0.100-alpha2" />
     <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinOpen" Version="3.0.100-alpha3" />
-    <PackageReference Include="Myvas.AspNetCore.TencentSms" Version="2.1.404" />
+    <PackageReference Include="Myvas.AspNetCore.TencentSms" Version="2.2.402" />
     <PackageReference Include="Myvas.AspNetCore.ViewDivert" Version="2.1.507" />
+    <PackageReference Include="Myvas.AspNetCore.Weixin" Version="3.0.100-alpha1" />
   </ItemGroup>
 
   <ItemGroup>
