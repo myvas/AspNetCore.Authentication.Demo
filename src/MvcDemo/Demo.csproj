@@ -5,7 +5,7 @@
     <UserSecretsId>Myvas.AspNetCore.Authentication.Demo</UserSecretsId>
     <RootNamespace>Demo</RootNamespace>
     <AssemblyName>Demo</AssemblyName>
-    <Version>3.1.100.1027</Version>
+    <Version>3.1.100.1214</Version>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
