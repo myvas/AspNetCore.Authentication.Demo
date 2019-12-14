@@ -1,11 +1,15 @@
 {
   "version": "1.0",
-  "defaultProvider": "cdnjs",
+  "defaultProvider": "unpkg",
   "libraries": [
+    {
+      "library": "bootstrap@4.3.1",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
     {
       "provider": "cdnjs",
       "library": "jquery@3.4.1",
-      "destination": "wwwroot/lib/jquery/dist"
+      "destination": "wwwroot/lib/jquery/"
     },
     {
       "provider": "cdnjs",
@@ -14,22 +18,16 @@
     },
     {
       "provider": "cdnjs",
-      "library": "font-awesome@5.11.2",
-      "destination": "wwwroot/lib/font-awesome/"
+      "library": "open-iconic@1.1.1",
+      "destination": "wwwroot/lib/open-iconic/"
     },
     {
-      "provider": "unpkg",
       "library": "jquery-validation@1.19.1",
       "destination": "wwwroot/lib/jquery-validation/"
     },
     {
-      "provider": "unpkg",
       "library": "jquery-qrcode2@1.0.0",
       "destination": "wwwroot/lib/jquery-qrcode2/"
-    },
-    {
-      "library": "open-iconic@1.1.1",
-      "destination": "wwwroot/open-iconic/"
     }
   ]
 }

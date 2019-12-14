@@ -98,7 +98,7 @@ namespace Demo
                 options.AppId = Configuration["Weixin:AppId"];
             });
             services.AddScoped<IWeixinEventSink, WeixinEventSink>();
-            var weixinEventSink = services.BuildServiceProvider().GetRequiredService<IWeixinEventSink>();
+            IWeixinEventSink weixinEventSink = services.BuildServiceProvider().GetRequiredService<IWeixinEventSink>();
             services.AddWeixinWelcomePage(options =>
             {
                 options.AppId = Configuration["Weixin:AppId"];

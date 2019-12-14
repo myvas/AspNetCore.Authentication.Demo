@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Demo.Applications
 {
-    public class WeixinEventSink : IWeixinEventSink
+    public class WeixinEventSink : WeixinEventSinkBase
 	{
 		private readonly ILogger<WeixinEventSink> _logger;
 		private readonly AppDbContext _db;
@@ -21,7 +21,7 @@ namespace Demo.Applications
 			_db = db ?? throw new ArgumentNullException(nameof(db));
 		}
 
-		public async Task<bool> OnTextMessageReceived(object sender, TextMessageReceivedEventArgs e)
+		public override async Task<bool> OnTextMessageReceived(object sender, TextMessageReceivedEventArgs e)
 		{
 			_logger.LogDebug(XmlConvert.SerializeObject(e));
 
@@ -56,7 +56,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnLinkMessageReceived(object sender, LinkMessageReceivedEventArgs e)
+		public override async Task<bool> OnLinkMessageReceived(object sender, LinkMessageReceivedEventArgs e)
 		{
 			_logger.LogInformation($"OnLinkMessageReceived: {e.Url}");
 
@@ -73,7 +73,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnVideoMessageReceived(object sender, VideoMessageReceivedEventArgs e)
+		public override async Task<bool> OnVideoMessageReceived(object sender, VideoMessageReceivedEventArgs e)
 		{
 			var messageHandler = sender as WeixinMessageHandler;
 			var responseMessage = new ResponseMessageText();
@@ -85,7 +85,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnShortVideoMessageReceived(object sender, ShortVideoMessageReceivedEventArgs e)
+		public override async Task<bool> OnShortVideoMessageReceived(object sender, ShortVideoMessageReceivedEventArgs e)
 		{
 			var messageHandler = sender as WeixinMessageHandler;
 			var responseMessage = new ResponseMessageText();
@@ -97,7 +97,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnVoiceMessageReceived(object sender, VoiceMessageReceivedEventArgs e)
+		public override async Task<bool> OnVoiceMessageReceived(object sender, VoiceMessageReceivedEventArgs e)
 		{
 			var messageHandler = sender as WeixinMessageHandler;
 			var responseMessage = new ResponseMessageVoice();
@@ -112,7 +112,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnImageMessageReceived(object sender, ImageMessageReceivedEventArgs e)
+		public override async Task<bool> OnImageMessageReceived(object sender, ImageMessageReceivedEventArgs e)
 		{
 			var messageHandler = sender as WeixinMessageHandler;
 			var responseMessage = new ResponseMessageNews();
@@ -137,7 +137,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnLocationMessageReceived(object sender, LocationMessageReceivedEventArgs e)
+		public override async Task<bool> OnLocationMessageReceived(object sender, LocationMessageReceivedEventArgs e)
 		{
 			var messageHandler = sender as WeixinMessageHandler;
 			var responseMessage = new ResponseMessageNews();
@@ -178,7 +178,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnLocationEventReceived(object sender, LocationEventReceivedEventArgs e)
+		public override async Task<bool> OnLocationEventReceived(object sender, LocationEventReceivedEventArgs e)
 		{
 			//这里是微信客户端（通过微信服务器）自动发送过来的位置信息
 			var messageHandler = sender as WeixinMessageHandler;
@@ -192,7 +192,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnClickMenuEventReceived(object sender, ClickMenuEventReceivedEventArgs e)
+		public override async Task<bool> OnClickMenuEventReceived(object sender, ClickMenuEventReceivedEventArgs e)
 		{
 			_logger.LogDebug("点击了子菜单按钮({0}): {1}", e.FromUserName, e.MenuItemKey);
 
@@ -206,7 +206,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnViewMenuEventReceived(object sender, ViewMenuEventReceivedEventArgs e)
+		public override async Task<bool> OnViewMenuEventReceived(object sender, ViewMenuEventReceivedEventArgs e)
 		{
 			_logger.LogDebug("点击了子菜单按钮({0}): {1}", e.FromUserName, e.Url);
 
@@ -220,7 +220,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnUnsubscribeEventReceived(object sender, UnsubscribeEventReceivedEventArgs e)
+		public override async Task<bool> OnUnsubscribeEventReceived(object sender, UnsubscribeEventReceivedEventArgs e)
 		{
 			_logger.LogDebug("Unsubscribe({0})", e.FromUserName);
 
@@ -234,7 +234,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnEnterEventReceived(object sender, EnterEventReceivedEventArgs e)
+		public override async Task<bool> OnEnterEventReceived(object sender, EnterEventReceivedEventArgs e)
 		{
 			var messageHandler = sender as WeixinMessageHandler;
 			_logger.LogDebug("Subscribe: from:{0}", e.FromUserName);
@@ -254,7 +254,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnSubscribeEventReceived(object sender, SubscribeEventReceivedEventArgs e)
+		public override async Task<bool> OnSubscribeEventReceived(object sender, SubscribeEventReceivedEventArgs e)
 		{
 			var messageHandler = sender as WeixinMessageHandler;
 			if (string.IsNullOrWhiteSpace(e.EventKey))
@@ -294,7 +294,7 @@ namespace Demo.Applications
 			return true;
 		}
 
-		public async Task<bool> OnQrscanEventReceived(object sender, QrscanEventReceivedEventArgs e)
+		public override async Task<bool> OnQrscanEventReceived(object sender, QrscanEventReceivedEventArgs e)
 		{
 			_logger.LogDebug("Qrscan({0}): {1}, {2}", e.FromUserName, e.EventKey, e.Ticket);
 

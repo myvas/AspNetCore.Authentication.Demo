@@ -16,10 +16,8 @@ namespace Demo.Data
 
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
-            using (var db = new AppDbContext(serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>()))
-            {
-                await EnsureAdminUser(serviceProvider);
-            }
+            using var db = new AppDbContext(serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>());
+            await EnsureAdminUser(serviceProvider);
         }
 
         private static async Task EnsureAdminUser(IServiceProvider serviceProvider)

@@ -1,8 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Demo";
+
+    var versionNumber = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
 }
 
-<h2 title="Myvas.AspNetCore.Authentication.Demo">@ViewData["Title"]</h2>
+<h2 title="Myvas.AspNetCore.Authentication.Demo">@ViewData["Title"] <small>@(versionNumber)</small></h2>
 
 <p>这是一组github开源项目的演示网站。本网站源代码在此：<a href="https://github.com/myvas/AspNetCore.Authentication.Demo.git">Myvas.AspNetCore.Authentication.Demo</a></p>
 <ul>
@@ -12,7 +14,7 @@
 </ul>
 
 <h3>部署环境</h3>
-<p>本程序部署在Debian.9-x64服务器上。</p>
+<p>本程序部署在Debian.10-x64服务器上。</p>
 <p><strong>注意：</strong>本程序必须部署公网服务器80端口上，并在相应微信公众号上配置好“网页服务/网页授权获取用户基本信息”才能正常工作。</p>
 <hr />
 <h3>触发身份验证</h3>
