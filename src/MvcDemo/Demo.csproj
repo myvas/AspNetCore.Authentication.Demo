@@ -5,20 +5,20 @@
     <UserSecretsId>Myvas.AspNetCore.Authentication.Demo</UserSecretsId>
     <RootNamespace>Demo</RootNamespace>
     <AssemblyName>Demo</AssemblyName>
-    <Version>3.1.100.1214</Version>
+    <Version>3.1.100.1215</Version>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />
-    <PackageReference Include="Myvas.AspNetCore.Authentication.QQConnect" Version="3.1.0.1" />
-    <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinAuth" Version="3.1.0.1" />
-    <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinOpen" Version="3.1.0.1" />
-    <PackageReference Include="Myvas.AspNetCore.TencentSms" Version="3.1.0.1" />
-    <PackageReference Include="Myvas.AspNetCore.ViewDivert" Version="3.1.0.1" />
-    <PackageReference Include="Myvas.AspNetCore.Weixin" Version="3.1.100.5" />
-    <PackageReference Include="Myvas.AspNetCore.Weixin.Jssdk" Version="3.1.100.5" />
+    <PackageReference Include="Myvas.AspNetCore.Authentication.QQConnect" Version="3.1.0.2" />
+    <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinAuth" Version="3.1.0.2" />
+    <PackageReference Include="Myvas.AspNetCore.Authentication.WeixinOpen" Version="3.1.0.2" />
+    <PackageReference Include="Myvas.AspNetCore.TencentSms" Version="3.1.0.2" />
+    <PackageReference Include="Myvas.AspNetCore.ViewDivert" Version="3.1.0.2" />
+    <PackageReference Include="Myvas.AspNetCore.Weixin" Version="3.1.100.8" />
+    <PackageReference Include="Myvas.AspNetCore.Weixin.Jssdk" Version="3.1.100.8" />
   </ItemGroup>
 
   <ItemGroup>
