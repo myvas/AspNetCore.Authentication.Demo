@@ -15,7 +15,7 @@ This repo (Branch 2.2) deployed on http://demo.auth.myvas.com (debian.9-x64)
 
 - Myvas.AspNetCore.ViewDivert [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.ViewDivert.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.ViewDivert) [![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/myvas/AspNetCore.ViewDivert?label=github)](https://github.com/myvas/AspNetCore.ViewDivert)
 
-- Myvas.AspNetCore.Weixin [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Weixin.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Weixin) [[github]](https://github.com/myvas/AspNetCore.Weixin)
+- Myvas.AspNetCore.Weixin [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Weixin.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Weixin) [![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/myvas/AspNetCore.Weixin?label=github)](https://github.com/myvas/AspNetCore.Weixin)
 
 ## Qrcode to enter the demo weixin service account:
 
