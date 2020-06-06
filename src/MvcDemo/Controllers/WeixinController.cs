@@ -15,14 +15,20 @@ namespace Demo.Controllers
         private readonly AppDbContext _db;
         private readonly ILogger<HomeController> _logger;
         private readonly IWeixinAccessToken _weixinAccessToken;
+        private readonly UserApi _api;
+        private readonly CustomerSupportApi Custom;
 
         public WeixinController(
             AppDbContext db,
             ILoggerFactory loggerFactory,
+            UserApi api,
+            CustomerSupportApi csApi,
             IWeixinAccessToken smsSender)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _logger = loggerFactory?.CreateLogger<HomeController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _api = api;
+            Custom = csApi;
             _weixinAccessToken = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
         }
 
@@ -40,7 +46,7 @@ namespace Demo.Controllers
             var vm = new ReturnableViewModel<IList<UserInfoJson>>();
 
             var token = _weixinAccessToken.GetToken();
-            var subscribers = await UserApi.GetAllUserInfo(token);
+            var subscribers = await _api.GetAllUserInfo(token);
             vm.Item = subscribers;
 
             return View(vm);
