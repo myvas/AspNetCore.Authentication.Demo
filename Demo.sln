@@ -23,8 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Data.Host", "src\Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Data", "src\Core\Demo.Data\Demo.Data.csproj", "{FD8A1277-9337-4B0B-8800-AA269AC317BF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Submodules", "_Submodules", "{BBBB46C5-EA77-4594-989E-5759BEDFF96F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
