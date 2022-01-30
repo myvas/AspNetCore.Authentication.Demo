@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ReceivedTextMessage>
+﻿@model IEnumerable<WeixinReceivedMessage>
 
 @{
 	ViewData["Title"] = "Received Text";
@@ -31,14 +31,14 @@
 			<dl class="dl-horizontal">
 				<dt>OpenId</dt>
 				<dd>
-					<div class="text-truncate" style="width:150px;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="@item.From">@item.From</div>
+					<div class="text-truncate" style="width:150px;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="@item.FromUserName">@item.FromUserName</div>
 				</dd>
 				<dt>Content</dt>
 				<dd>@item.Content</dd>
 				<dt>Received Time</dt>
-				<dd>@item.ReceivedTime.ToLocalTime().ToString("yyyy-MM-dd hh:mm:ss")</dd>
+				<dd>@item.CreateTimeOffset?.ToLocalTime().ToString("yyyy-MM-dd hh:mm:ss")</dd>
 			</dl>
-			<a asp-action="SendWeixin" asp-route-openid="@item.From">发送微信消息</a>
+			<a asp-action="SendWeixin" asp-route-openid="@item.FromUserName">发送微信消息</a>
 		</div>
 	</div>
 	<hr />

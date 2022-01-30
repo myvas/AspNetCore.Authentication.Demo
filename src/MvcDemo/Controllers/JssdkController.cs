@@ -1,5 +1,6 @@
 using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Options;
 using Myvas.AspNetCore.Weixin;
 using System;
@@ -8,18 +9,15 @@ namespace Demo.Controllers
 {
     public class JssdkController : Controller
     {
-        private readonly IWeixinAccessToken _weixinAccessToken;
-		private readonly IWeixinJsapiTicket _weixinJsapiTicket;
-		private readonly WeixinAccessTokenOptions _options;
+        private readonly IWeixinJsapiTicket _weixinJsapiTicket;
+        private readonly WeixinApiOptions _options;
 
         public JssdkController(
-            IWeixinAccessToken weixinAccessToken,
-			IWeixinJsapiTicket weixinJsapiTicket,
-            IOptions<WeixinAccessTokenOptions> optionsAccessor)
-		{
-			_weixinAccessToken = weixinAccessToken ?? throw new ArgumentNullException(nameof(weixinAccessToken));
-			_weixinJsapiTicket = weixinJsapiTicket ?? throw new ArgumentNullException(nameof(weixinJsapiTicket));
-			_options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
+            IWeixinJsapiTicket weixinJsapiTicket,
+            IOptions<WeixinApiOptions> optionsAccessor)
+        {
+            _weixinJsapiTicket = weixinJsapiTicket ?? throw new ArgumentNullException(nameof(weixinJsapiTicket));
+            _options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
         }
 
         public IActionResult Index()
