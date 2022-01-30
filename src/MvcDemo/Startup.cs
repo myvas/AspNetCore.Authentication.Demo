@@ -1,5 +1,4 @@
-using Demo.Applications;
-using Demo.Models;
+using Demo.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -7,32 +6,42 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Myvas.AspNetCore.Authentication;
 using Myvas.AspNetCore.Weixin;
+using System.Reflection;
 
 namespace Demo
 {
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration config, IWebHostEnvironment environment)
         {
-            Configuration = configuration;
+            Configuration = config;
+            Environment = environment;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"),
-            x => x.MigrationsAssembly("Demo")));
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            services.AddIdentity<AppUser, AppRole>()
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddUserManager<AppUserManager>()
-                .AddSignInManager<SignInManager<AppUser>>()
-                .AddDefaultTokenProviders();
+            if (Environment.IsDevelopment())
+            {
+                services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            }
+            else
+            {
+                services.AddControllersWithViews();
+            }
+
+            services.AddDbContext<DemoDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), sql => sql.MigrationsAssembly(migrationsAssembly)));
+
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<DemoDbContext>();
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password = new PasswordOptions
@@ -49,37 +58,37 @@ namespace Demo
             });
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/Account/Login";
-                options.LogoutPath = "/Account/LogOff";
-                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.LoginPath = "/Identity/Account/Login";
+                options.LogoutPath = "/Identity/Account/Logout";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
             });
 
-            services.AddAuthentication()
-                .AddWeixinOpen(options =>
-                {
-                    options.AppId = Configuration["WeixinOpen:AppId"];
-                    options.AppSecret = Configuration["WeixinOpen:AppSecret"];
-                    options.SaveTokens = true;
-                })
-                .AddWeixinAuth(options =>
-                {
-                    options.AppId = Configuration["WeixinAuth:AppId"];
-                    options.AppSecret = Configuration["WeixinAuth:AppSecret"];
-                    options.SilentMode = false; //不采用静默模式
-                                                //options.SaveTokens = true;
-                })
-                .AddQQConnect(options =>
-                {
-                    options.AppId = Configuration["QQConnect:AppId"];
-                    options.AppKey = Configuration["QQConnect:AppKey"];
-                    //options.SaveTokens = true;
+            //services.AddAuthentication();
+            //    .AddWeixinOpen(options =>
+            //    {
+            //        options.AppId = Configuration["WeixinOpen:AppId"];
+            //        options.AppSecret = Configuration["WeixinOpen:AppSecret"];
+            //        options.SaveTokens = true;
+            //    })
+            //    .AddWeixinAuth(options =>
+            //    {
+            //        options.AppId = Configuration["WeixinAuth:AppId"];
+            //        options.AppSecret = Configuration["WeixinAuth:AppSecret"];
+            //        options.SilentMode = false; //不采用静默模式
+            //        //options.SaveTokens = true;
+            //    })
+            //    .AddQQConnect(options =>
+            //    {
+            //        options.AppId = Configuration["QQConnect:AppId"];
+            //        options.AppKey = Configuration["QQConnect:AppKey"];
+            //        //options.SaveTokens = true;
 
-                    QQConnectScopes.TryAdd(options.Scope,
-                        QQConnectScopes.get_user_info,
-                        QQConnectScopes.list_album,
-                        QQConnectScopes.upload_pic,
-                        QQConnectScopes.do_like);
-                });
+            //        QQConnectScopes.TryAdd(options.Scope,
+            //            QQConnectScopes.get_user_info,
+            //            QQConnectScopes.list_album,
+            //            QQConnectScopes.upload_pic,
+            //            QQConnectScopes.do_like);
+            //    });
 
             services.AddTencentSms(options =>
             {
@@ -88,7 +97,7 @@ namespace Demo
             });
 
             services.AddViewDivert();
-            services.AddWeixinAccessToken(options =>
+            services.AddWeixinApi(options =>
             {
                 options.AppId = Configuration["Weixin:AppId"];
                 options.AppSecret = Configuration["Weixin:AppSecret"];
@@ -97,34 +106,31 @@ namespace Demo
             {
                 options.AppId = Configuration["Weixin:AppId"];
             });
-            services.AddScoped<IWeixinEventSink, WeixinEventSink>();
-            IWeixinEventSink weixinEventSink = services.BuildServiceProvider().GetRequiredService<IWeixinEventSink>();
-            services.AddWeixinWelcomePage(options =>
+            services.AddWeixinSite(options =>
             {
                 options.AppId = Configuration["Weixin:AppId"];
                 options.AppSecret = Configuration["Weixin:AppSecret"];
+                //options.Debug = true;
                 options.WebsiteToken = Configuration["Weixin:WebsiteToken"];
-                options.EncodingAESKey = Configuration["Weixin:EncodingAESKey"];
-                options.Path = "/wx";
-                options.Events = new WeixinMessageEvents()
-                {
-                    OnTextMessageReceived = ctx => weixinEventSink.OnTextMessageReceived(ctx.Sender, ctx.Args),
-                    OnLinkMessageReceived = ctx => weixinEventSink.OnLinkMessageReceived(ctx.Sender, ctx.Args),
-                    OnClickMenuEventReceived = ctx => weixinEventSink.OnClickMenuEventReceived(ctx.Sender, ctx.Args),
-                    OnImageMessageReceived = ctx => weixinEventSink.OnImageMessageReceived(ctx.Sender, ctx.Args),
-                    OnLocationEventReceived = ctx => weixinEventSink.OnLocationEventReceived(ctx.Sender, ctx.Args),
-                    OnLocationMessageReceived = ctx => weixinEventSink.OnLocationMessageReceived(ctx.Sender, ctx.Args),
-                    OnQrscanEventReceived = ctx => weixinEventSink.OnQrscanEventReceived(ctx.Sender, ctx.Args),
-                    OnSubscribeEventReceived = ctx => weixinEventSink.OnSubscribeEventReceived(ctx.Sender, ctx.Args),
-                    OnUnsubscribeEventReceived = ctx => weixinEventSink.OnUnsubscribeEventReceived(ctx.Sender, ctx.Args),
-                    OnVideoMessageReceived = ctx => weixinEventSink.OnVideoMessageReceived(ctx.Sender, ctx.Args),
-                    OnShortVideoMessageReceived = ctx => weixinEventSink.OnShortVideoMessageReceived(ctx.Sender, ctx.Args),
-                    OnViewMenuEventReceived = ctx => weixinEventSink.OnViewMenuEventReceived(ctx.Sender, ctx.Args),
-                    OnVoiceMessageReceived = ctx => weixinEventSink.OnVoiceMessageReceived(ctx.Sender, ctx.Args)
-                };
-            });
-          
-            services.AddControllersWithViews();
+                //options.EncodingAESKey = Configuration["Weixin:EncodingAESKey"];
+                //options.Path = "/wx"; //default is "/wx"
+                //options.Events = new WeixinEvents()
+                //{
+                //    OnTextMessageReceived = ctx => weixinEventSink.OnTextMessageReceived(ctx.Sender, ctx.Args),
+                //    OnLinkMessageReceived = ctx => weixinEventSink.OnLinkMessageReceived(ctx.Sender, ctx.Args),
+                //    OnClickMenuEventReceived = ctx => weixinEventSink.OnClickMenuEventReceived(ctx.Sender, ctx.Args),
+                //    OnImageMessageReceived = ctx => weixinEventSink.OnImageMessageReceived(ctx.Sender, ctx.Args),
+                //    OnLocationEventReceived = ctx => weixinEventSink.OnLocationEventReceived(ctx.Sender, ctx.Args),
+                //    OnLocationMessageReceived = ctx => weixinEventSink.OnLocationMessageReceived(ctx.Sender, ctx.Args),
+                //    OnQrscanEventReceived = ctx => weixinEventSink.OnQrscanEventReceived(ctx.Sender, ctx.Args),
+                //    OnSubscribeEventReceived = ctx => weixinEventSink.OnSubscribeEventReceived(ctx.Sender, ctx.Args),
+                //    OnUnsubscribeEventReceived = ctx => weixinEventSink.OnUnsubscribeEventReceived(ctx.Sender, ctx.Args),
+                //    OnVideoMessageReceived = ctx => weixinEventSink.OnVideoMessageReceived(ctx.Sender, ctx.Args),
+                //    OnShortVideoMessageReceived = ctx => weixinEventSink.OnShortVideoMessageReceived(ctx.Sender, ctx.Args),
+                //    OnViewMenuEventReceived = ctx => weixinEventSink.OnViewMenuEventReceived(ctx.Sender, ctx.Args),
+                //    OnVoiceMessageReceived = ctx => weixinEventSink.OnVoiceMessageReceived(ctx.Sender, ctx.Args)
+                //};
+            }).AddEntityFrameworkCores<DemoDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -142,19 +148,17 @@ namespace Demo
             }
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseWeixinSite();
 
             app.UseRouting();
             app.UseAuthentication();
-
             app.UseAuthorization();
-          
-            app.UseWeixinWelcomePage();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapAreaControllerRoute("Identity", "Identity", "Identity/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
         }
     }

@@ -6,34 +6,36 @@ using Myvas.AspNetCore.Weixin;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using Demo.Data;
 
 namespace Demo.Controllers
 {
     [Authorize]//(Policy = "WeixinMenuManager")]
 	public class WeixinMenuController : Controller
 	{
-		private readonly AppDbContext _context;
+		private readonly DemoDbContext _context;
 		private readonly IWeixinAccessToken _weixinAccessToken;
 		private readonly ILogger<WeixinMenuController> _logger;
+		private readonly IWeixinMenuApi _api;
 
-		public WeixinMenuController(AppDbContext context,
+		public WeixinMenuController(DemoDbContext context,
 			IWeixinAccessToken weixinAccessToken,
+			IWeixinMenuApi api,
 			ILogger<WeixinMenuController> logger)
 		{
 			_context = context;
 			_weixinAccessToken = weixinAccessToken;
+			_api = api;
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task<IActionResult> Index()
 		{
-			var token = _weixinAccessToken.GetToken();
-			var resultJson = await MenuApi.GetMenuAsync(token);
+			var menu = await _api.GetMenuAsync();
 
 			var vm = new WeixinJsonViewModel
 			{
-				Token = token,
-				Json = JsonConvert.SerializeObject(resultJson, Formatting.Indented)
+				Json = menu.ToJson()// JsonConvert.SerializeObject(resultJson, Formatting.Indented)
 			};
 			return View(vm);
 		}
@@ -46,8 +48,7 @@ namespace Demo.Controllers
 			{
 				if (!string.IsNullOrEmpty(vm.Json))
 				{
-					var token = _weixinAccessToken.GetToken();
-					var result = await MenuApi.CreateMenuAsync(token, vm.Json);
+					var result = await _api.PublishMenuAsync(vm.Json);
 
 					_logger.LogDebug(result.ToString());
 
