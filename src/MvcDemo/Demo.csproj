@@ -10,6 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="demo.sqlite" />
+    <None Remove="demo.sqlite-shm" />
+    <None Remove="demo.sqlite-wal" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.2" PrivateAssets="all" />
@@ -37,12 +43,6 @@
     <ProjectReference Include="..\..\..\Myvas.AspNetCore.Weixin\Myvas.AspNetCore.Weixin\src\WeixinEfCore\Myvas.AspNetCore.Weixin.EfCore.csproj" />
     <ProjectReference Include="..\..\..\Myvas.AspNetCore.Weixin\Myvas.AspNetCore.Weixin\src\WeixinJssdk\Myvas.AspNetCore.Weixin.Jssdk.csproj" />
     <ProjectReference Include="..\..\..\Myvas.AspNetCore.Weixin\Myvas.AspNetCore.Weixin\src\WeixinSite\Myvas.AspNetCore.Weixin.Site.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="demo.sqlite">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
