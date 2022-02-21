@@ -1,5 +1,5 @@
 # Myvas.AspNetCore.Authentication.Demo
-This repo (Branch 2.2) deployed on http://demo.auth.myvas.com (debian.9-x64)
+This repo (Branch 6.0) deployed on http://demo.auth.myvas.com (debian.9-x64)
 
 ## Components:
 
