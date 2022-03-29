@@ -13,13 +13,16 @@ namespace Demo.Controllers
     public class QrcodeController : Controller
     {
         private readonly ILogger _logger;
-        private readonly IQrcodeApi _api;
+        private readonly IWeixinAccessToken _accessToken;
+        private readonly QrcodeApi _api;
 
         public QrcodeController(ILoggerFactory loggerFactory,
-            IQrcodeApi api)
+            IWeixinAccessToken accessToken,
+            QrcodeApi api)
         {
             _logger = loggerFactory?.CreateLogger<QrcodeController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _api = api;
+            _accessToken = accessToken;
         }
 
         public IActionResult Index()
@@ -30,14 +33,16 @@ namespace Demo.Controllers
         [HttpGet("[controller]/[action]/{scene}")]
         public async Task<IActionResult> UrlWithScene(string scene)
         {
-            var createQrcodeResult = await _api.CreateAsync("QR_LIMIT_STR_SCENE", scene);
+            var token = await _accessToken.GetTokenAsync();
+            var createQrcodeResult = await _api.Create(token, "QR_LIMIT_STR_SCENE", scene);
             return Json(createQrcodeResult);
         }
 
         [HttpGet("[controller]/[action]/{scene}")]
         public async Task<IActionResult> QrcodeWithScene(string scene)
         {
-            var createQrcodeResult = await _api.CreateAsync("QR_LIMIT_STR_SCENE", scene);
+            var token = await _accessToken.GetTokenAsync();
+            var createQrcodeResult = await _api.Create(token, "QR_LIMIT_STR_SCENE", scene);
 
             var url = _api.ShowQrcode(createQrcodeResult.ticket);
 

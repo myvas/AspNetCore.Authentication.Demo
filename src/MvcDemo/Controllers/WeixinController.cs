@@ -1,9 +1,9 @@
 ﻿using Demo.Data;
 using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Myvas.AspNetCore.Weixin;
+using Myvas.AspNetCore.Weixin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +16,18 @@ namespace Demo.Controllers
         private readonly DemoDbContext _db;
         private readonly ILogger<HomeController> _logger;
         private readonly IWeixinAccessToken _weixinAccessToken;
-        private readonly IWeixinUserApi _api;
-        private readonly ICustomerSupportApi Custom;
-        private readonly IWeixinSubscriberStore _subscriberStore;
-        private readonly IWeixinReceivedMessageStore _messageStore;
+        private readonly UserApi _api;
+        private readonly CustomerSupportApi Custom;
+        private readonly ISubscriberStore<Subscriber> _subscriberStore;
+        private readonly IReceivedEntryStore<MessageReceivedEntry> _messageStore;
 
         public WeixinController(
             DemoDbContext db,
             ILoggerFactory loggerFactory,
-            IWeixinUserApi api,
-            ICustomerSupportApi csApi,
-            IWeixinSubscriberStore subscriberStore,
-            IWeixinReceivedMessageStore messageStore,
+            UserApi api,
+            CustomerSupportApi csApi,
+            ISubscriberStore<Subscriber> subscriberStore,
+            IReceivedEntryStore<MessageReceivedEntry> messageStore,
             IWeixinAccessToken smsSender)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
@@ -41,9 +41,9 @@ namespace Demo.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var subscriberCount = await _subscriberStore.GetCountAsync();
-            var receivedTextCount = await _messageStore.GetCountAsync();
-            var vm = new WeixinIndexViewModel() { SubscriberCount = subscriberCount, ReceivedTextCount = receivedTextCount };
+            var subscriberCount = await _subscriberStore.GetSubscribersCountAsync();
+            var receivedTextCount = await _messageStore.GetAllByReceivedTimeAsync(null, null);
+            var vm = new WeixinIndexViewModel() { SubscriberCount = subscriberCount, ReceivedTextCount = receivedTextCount.Count() };
 
             return View(vm);
         }
@@ -52,7 +52,8 @@ namespace Demo.Controllers
         {
             var vm = new ReturnableViewModel<IList<UserInfoJson>>();
 
-            var subscribers = await _api.GetAllUserInfoAsync();
+            var token = await _weixinAccessToken.GetTokenAsync();
+            var subscribers = await _api.GetAllUserInfo(token);
             vm.Item = subscribers;
 
             return View(vm);
@@ -61,8 +62,7 @@ namespace Demo.Controllers
 
         public async Task<IActionResult> ReceivedText()
         {
-            var count = await _messageStore.GetCountAsync();
-            var items = await _messageStore.GetItemsAsync(count, 0);
+            var items = await _messageStore.GetAllByReceivedTimeAsync(null, null);
             _logger.LogDebug($"微信文本消息在数据库中共{items.Count()}条记录。");
             return View(items);
         }
@@ -76,7 +76,7 @@ namespace Demo.Controllers
 
             var vm = new SendWeixinViewModel
             {
-                Received = await _messageStore.Items.Where(x => x.ToUserName == openId).ToListAsync(),
+                Received = await _messageStore.GetAllByToUserNameAsync(openId),
                 OpenId = openId
             };
             return View(vm);
@@ -91,11 +91,11 @@ namespace Demo.Controllers
                 return View(vm);
             }
 
-            var token = _weixinAccessToken.GetToken();
-            var result = await Custom.SendTextAsync(vm.OpenId, vm.Content);
+            var token = await _weixinAccessToken.GetTokenAsync();
+            var result = await Custom.SendText(token, vm.OpenId, vm.Content);
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("", result.errmsg);
+                ModelState.AddModelError("", result.ErrorMessage);
                 return View(vm);
             }
 

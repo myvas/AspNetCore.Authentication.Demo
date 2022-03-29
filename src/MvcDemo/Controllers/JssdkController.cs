@@ -11,11 +11,11 @@ namespace Demo.Controllers
     public class JssdkController : Controller
     {
         private readonly IWeixinJsapiTicket _weixinJsapiTicket;
-        private readonly WeixinApiOptions _options;
+        private readonly WeixinOptions _options;
 
         public JssdkController(
             IWeixinJsapiTicket weixinJsapiTicket,
-            IOptions<WeixinApiOptions> optionsAccessor)
+            IOptions<WeixinOptions> optionsAccessor)
         {
             _weixinJsapiTicket = weixinJsapiTicket ?? throw new ArgumentNullException(nameof(weixinJsapiTicket));
             _options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
@@ -30,7 +30,7 @@ namespace Demo.Controllers
                 debug = true,
                 appId = _options.AppId
             };
-            var jsapiTicket = await _weixinJsapiTicket.GetJsapiTicketAsync();
+            var jsapiTicket = await _weixinJsapiTicket.GetTicketAsync();
             var refererUrl = Request.GetAbsoluteUri();// Url.AbsoluteContent(Url.Action());
             vm.ConfigJson = config.ToJson(jsapiTicket, refererUrl);
 
