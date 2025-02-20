@@ -1,5 +1,5 @@
 # Myvas.AspNetCore.Authentication.Demo
-This repo (Branch 6.0) deployed on http://demo.auth.myvas.com (debian.11-x64)
+This repo (Branch 8.0) deployed on http://demo.auth.myvas.com (debian.11-x64)
 
 ## Components:
 - Myvas.AspNetCore.Authentication.WeixinAuth [![NuGet](https://img.shields.io/nuget/v/Myvas.AspNetCore.Authentication.WeixinAuth.svg)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth) [![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/Myvas.AspNetCore.Authentication.WeixinAuth)](https://www.nuget.org/packages/Myvas.AspNetCore.Authentication.WeixinAuth) [![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/myvas/AspNetCore.Authentication.WeixinAuth?label=github)](https://github.com/myvas/AspNetCore.Authentication.WeixinAuth)
@@ -14,7 +14,7 @@ This repo (Branch 6.0) deployed on http://demo.auth.myvas.com (debian.11-x64)
 ![alt QrCode](http://mmbiz.qpic.cn/mmbiz_jpg/lPe5drS9euRQR1eCK5cGXaibHYL6vBR4pGLB34ju2hXCiaMQiayOU8w5GMfEH7WZsVNTnhLTpnzAC9xfdWuTT89OA/0)
 
 ## Dev
-* Visual Studio 2022 with .NET Core SDK 6.0
+* Visual Studio 2022 with .NET Core SDK 8.0
 * [微信开发者工具](https://mp.weixin.qq.com/debug/wxadoc/dev/devtools/download.html)
 
 # Third-party OAuth account settings:
