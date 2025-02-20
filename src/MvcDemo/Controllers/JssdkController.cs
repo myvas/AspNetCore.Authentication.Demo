@@ -10,12 +10,12 @@ namespace Demo.Controllers
     {
         private readonly IWeixinAccessToken _weixinAccessToken;
 		private readonly IWeixinJsapiTicket _weixinJsapiTicket;
-		private readonly WeixinAccessTokenOptions _options;
+		private readonly WeixinJssdkOptions _options;
 
         public JssdkController(
             IWeixinAccessToken weixinAccessToken,
 			IWeixinJsapiTicket weixinJsapiTicket,
-            IOptions<WeixinAccessTokenOptions> optionsAccessor)
+            IOptions<WeixinJssdkOptions> optionsAccessor)
 		{
 			_weixinAccessToken = weixinAccessToken ?? throw new ArgumentNullException(nameof(weixinAccessToken));
 			_weixinJsapiTicket = weixinJsapiTicket ?? throw new ArgumentNullException(nameof(weixinJsapiTicket));
