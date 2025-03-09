@@ -14,10 +14,10 @@ namespace Demo.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger _logger;
-        private readonly SignInManager<AppUser> _signInManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         public HomeController(
-            SignInManager<AppUser> signInManager,
+            SignInManager<IdentityUser> signInManager,
             ILogger<HomeController> logger)
         {
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
@@ -57,7 +57,7 @@ namespace Demo.Controllers
             return View();
         }
 
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> UserInfo()
         {
             var model = new UserInfoViewModel()

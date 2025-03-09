@@ -1,0 +1,22 @@
+﻿{
+    "Serilog": {
+        "MinimumLevel": {
+            "Default": "Debug",
+            "Override": {
+                "Myvas": "Debug"
+            }
+        },
+        "WriteTo": [
+            {
+                "Name": "Console"
+            },
+            {
+                "Name": "File",
+                "Args": {
+                    "path": "Log\\demo_debug.log",
+                    "rollingInterval": "Day"
+                }
+            }
+        ]
+    }
+}

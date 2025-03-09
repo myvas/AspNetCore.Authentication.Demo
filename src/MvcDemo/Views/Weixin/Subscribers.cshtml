@@ -15,10 +15,10 @@ else
 	@foreach (var item in Model.Item)
 	{
 		<div class="media">
-			<img class="mr-3" src="@item.headimgurl" style="width:64px;" />
+			<img class="mr-3" src="@item.AvatorImageUrl" style="width:64px;" />
 			<div class="media-body">
 				<h5 class="mt-0">
-					<span>@item.nickname</span>
+					<span>@item.NickName</span>
 					@{
 						switch (item.sex)
 						{
@@ -36,16 +36,16 @@ else
 				<dl class="dl-horizontal">
 					<dt>OpenId</dt>
 					<dd>
-						<div class="text-truncate" style="width:150px;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="@item.openid">@item.openid</div>
+						<div class="text-truncate" style="width:150px;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="@item.OpenId">@item.OpenId</div>
 					</dd>
 					<dt>Province</dt>
-					<dd>@item.province</dd>
+					<dd>@item.Province</dd>
 					<dt>City</dt>
-					<dd>@item.city</dd>
+					<dd>@item.City</dd>
 					<dt>Subscribe Time</dt>
-					<dd>@WeixinTimestampHelper.ToLocalTime(item.subscribe_time)</dd>
+					<dd>@item.SubscribeTime?.ToString("yyyy-MM-dd HH:mm:ss")</dd>
 				</dl>
-				<a asp-action="SendWeixin" asp-route-openid="@item.openid">发送微信消息</a>
+				<a asp-action="SendWeixin" asp-route-openid="@item.OpenId">发送微信消息</a>
 			</div>
 		</div>
 		<hr />

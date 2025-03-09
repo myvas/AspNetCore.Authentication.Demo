@@ -237,3 +237,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 /.submodules
+**/*.sqlite
+**/*.sqlite-shm
+**/*.sqlite-wal

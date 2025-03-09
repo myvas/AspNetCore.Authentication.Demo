@@ -3,26 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Myvas.AspNetCore.Weixin;
 using System;
+using System.Threading.Tasks;
 
 namespace Demo.Controllers
 {
     public class JssdkController : Controller
     {
-        private readonly IWeixinAccessToken _weixinAccessToken;
-		private readonly IWeixinJsapiTicket _weixinJsapiTicket;
-		private readonly WeixinJssdkOptions _options;
+        private readonly IWeixinJsapiTicketApi _weixinJsapiTicket;
+        private readonly WeixinOptions _options;
 
         public JssdkController(
-            IWeixinAccessToken weixinAccessToken,
-			IWeixinJsapiTicket weixinJsapiTicket,
-            IOptions<WeixinJssdkOptions> optionsAccessor)
-		{
-			_weixinAccessToken = weixinAccessToken ?? throw new ArgumentNullException(nameof(weixinAccessToken));
-			_weixinJsapiTicket = weixinJsapiTicket ?? throw new ArgumentNullException(nameof(weixinJsapiTicket));
-			_options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
+            IWeixinJsapiTicketApi weixinJsapiTicket,
+            IOptions<WeixinOptions> optionsAccessor)
+        {
+            _weixinJsapiTicket = weixinJsapiTicket ?? throw new ArgumentNullException(nameof(weixinJsapiTicket));
+            _options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var vm = new ShareJweixinViewModel();
 
@@ -31,7 +29,7 @@ namespace Demo.Controllers
                 debug = true,
                 appId = _options.AppId
             };
-            var jsapiTicket = _weixinJsapiTicket.GetTicket();
+            var jsapiTicket = await _weixinJsapiTicket.GetTicketAsync();
             var refererUrl = Request.GetAbsoluteUri();// Url.AbsoluteContent(Url.Action());
             vm.ConfigJson = config.ToJson(jsapiTicket, refererUrl);
 

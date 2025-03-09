@@ -12,9 +12,9 @@ namespace Demo.Controllers
     [ApiController]
     public class WeixinAccessTokenController : ControllerBase
     {
-		private readonly IWeixinAccessToken _weixinAccessToken;
+		private readonly IWeixinAccessTokenApi _weixinAccessToken;
 
-		public WeixinAccessTokenController(IWeixinAccessToken weixinAccessToken)
+		public WeixinAccessTokenController(IWeixinAccessTokenApi weixinAccessToken)
 		{
 			_weixinAccessToken = weixinAccessToken;
 		}
