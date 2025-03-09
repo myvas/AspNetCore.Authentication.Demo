@@ -15,7 +15,7 @@ namespace Demo.Controllers
     {
         private readonly DemoDbContext _db;
         private readonly ILogger<HomeController> _logger;
-        private readonly IWeixinAccessToken _weixinAccessToken;
+        private readonly IWeixinAccessTokenApi _weixinAccessToken;
         private readonly UserApi _api;
         private readonly CustomerSupportApi Custom;
         private readonly ISubscriberStore<Subscriber> _subscriberStore;
@@ -28,7 +28,7 @@ namespace Demo.Controllers
             CustomerSupportApi csApi,
             ISubscriberStore<Subscriber> subscriberStore,
             IReceivedEntryStore<MessageReceivedEntry> messageStore,
-            IWeixinAccessToken smsSender)
+            IWeixinAccessTokenApi smsSender)
         {
             _db = db ?? throw new ArgumentNullException(nameof(db));
             _logger = loggerFactory?.CreateLogger<HomeController>() ?? throw new ArgumentNullException(nameof(loggerFactory));

@@ -13,11 +13,11 @@ namespace Demo.Controllers
     public class QrcodeController : Controller
     {
         private readonly ILogger _logger;
-        private readonly IWeixinAccessToken _accessToken;
+        private readonly IWeixinAccessTokenApi _accessToken;
         private readonly QrcodeApi _api;
 
         public QrcodeController(ILoggerFactory loggerFactory,
-            IWeixinAccessToken accessToken,
+            IWeixinAccessTokenApi accessToken,
             QrcodeApi api)
         {
             _logger = loggerFactory?.CreateLogger<QrcodeController>() ?? throw new ArgumentNullException(nameof(loggerFactory));

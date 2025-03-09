@@ -14,12 +14,12 @@ namespace Demo.Controllers
     public class WeixinMenuController : Controller
     {
         private readonly DemoDbContext _context;
-        private readonly IWeixinAccessToken _weixinAccessToken;
+        private readonly IWeixinAccessTokenApi _weixinAccessToken;
         private readonly ILogger<WeixinMenuController> _logger;
         private readonly MenuApi _api;
 
         public WeixinMenuController(DemoDbContext context,
-            IWeixinAccessToken weixinAccessToken,
+            IWeixinAccessTokenApi weixinAccessToken,
             MenuApi api,
             ILogger<WeixinMenuController> logger)
         {
