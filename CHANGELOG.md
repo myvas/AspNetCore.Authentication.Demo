@@ -1,4 +1,16 @@
-# Changelog
+# CHANGELOGS
+
+## 8.0.0 (2024-08-01)
+- Target net8.0
+
+## 7.0.0 (2023-09-17)
+- Target net7.0
+
+## 6.0.3 (2022-03-31)
+- Target net6.0
+
+## 3.1.0 (2020-06-07)
+- Target netcoreapp3.1
 
 ## 2.1.504 (2019-03-09)
 - Update to dotnet-sdk-2.1.504

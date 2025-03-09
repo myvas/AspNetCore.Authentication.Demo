@@ -9,11 +9,11 @@ namespace Demo.Controllers
 {
     public class JssdkController : Controller
     {
-        private readonly IWeixinJsapiTicket _weixinJsapiTicket;
+        private readonly IWeixinJsapiTicketApi _weixinJsapiTicket;
         private readonly WeixinOptions _options;
 
         public JssdkController(
-            IWeixinJsapiTicket weixinJsapiTicket,
+            IWeixinJsapiTicketApi weixinJsapiTicket,
             IOptions<WeixinOptions> optionsAccessor)
         {
             _weixinJsapiTicket = weixinJsapiTicket ?? throw new ArgumentNullException(nameof(weixinJsapiTicket));
