@@ -12,7 +12,6 @@
 		<None Remove="bundleconfig.json" />
 		<None Remove="libman.json" />
 		<None Remove="serilog.Development.json" />
-		<None Remove="demo - 副本.sqlite" />
 		<None Remove="demo.sqlite" />
 		<None Remove="demo.sqlite-shm" />
 		<None Remove="demo.sqlite-wal" />
@@ -38,7 +37,7 @@
 		<PackageReference Include="Myvas.AspNetCore.Authentication.WeixinOpen" Version="6.0.3" />
 		<PackageReference Include="Myvas.AspNetCore.TencentSms" Version="6.0.3" />
 		<PackageReference Include="Myvas.AspNetCore.ViewDivert" Version="3.1.0.2" />
-		<PackageReference Include="Myvas.AspNetCore.Weixin" Version="9.0.0-previe.3" />
+		<PackageReference Include="Myvas.AspNetCore.Weixin" Version="9.0.0-previe.7" />
 		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
 	</ItemGroup>
 
