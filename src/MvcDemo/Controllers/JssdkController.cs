@@ -9,14 +9,14 @@ namespace Demo.Controllers
 {
     public class JssdkController : Controller
     {
-        private readonly IWeixinJsapiTicketApi _weixinJsapiTicket;
+        private readonly IWeixinJsapiTicketApi _api;
         private readonly WeixinOptions _options;
 
         public JssdkController(
-            IWeixinJsapiTicketApi weixinJsapiTicket,
+            IWeixinJsapiTicketApi api,
             IOptions<WeixinOptions> optionsAccessor)
         {
-            _weixinJsapiTicket = weixinJsapiTicket ?? throw new ArgumentNullException(nameof(weixinJsapiTicket));
+            _api = api ?? throw new ArgumentNullException(nameof(api));
             _options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
         }
 
@@ -29,9 +29,9 @@ namespace Demo.Controllers
                 debug = true,
                 appId = _options.AppId
             };
-            var jsapiTicket = await _weixinJsapiTicket.GetTicketAsync();
+            var jsapiTicket = await _api.GetTicketAsync();
             var refererUrl = Request.GetAbsoluteUri();// Url.AbsoluteContent(Url.Action());
-            vm.ConfigJson = config.ToJson(jsapiTicket, refererUrl);
+            vm.ConfigJson = config.ToJson(jsapiTicket.Ticket, refererUrl);
 
             vm.Title = "链接分享测试";
             vm.Url = "http://demo.auth.myvas.com/jssdk";

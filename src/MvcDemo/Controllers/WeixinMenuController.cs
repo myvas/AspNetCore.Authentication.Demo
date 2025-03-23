@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Myvas.AspNetCore.Weixin;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Threading.Tasks;
 using Demo.Data;
@@ -21,8 +21,8 @@ namespace Demo.Controllers
             IWeixinMenuApi api,
             ILogger<WeixinMenuController> logger)
         {
-            _context = context;
-            _api = api;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _api = api ?? throw new ArgumentNullException(nameof(api));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -32,7 +32,7 @@ namespace Demo.Controllers
 
             var vm = new WeixinJsonViewModel
             {
-                Json = WeixinJsonHelper.Serialize(menu)// JsonConvert.SerializeObject(resultJson, Formatting.Indented)
+                Json = JsonSerializer.Serialize(menu)// JsonConvert.SerializeObject(resultJson, Formatting.Indented)
             };
             return View(vm);
         }
@@ -45,7 +45,7 @@ namespace Demo.Controllers
             {
                 if (!string.IsNullOrEmpty(vm.Json))
                 {
-                    var result = await _api.CreateMenuAsync(vm.Json);
+                    var result = await _api.PublishMenuAsync(vm.Json);
 
                     _logger.LogDebug(result.ToString());
 

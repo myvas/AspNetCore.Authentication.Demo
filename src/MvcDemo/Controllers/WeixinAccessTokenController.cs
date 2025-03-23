@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,16 +12,16 @@ namespace Demo.Controllers
     [ApiController]
     public class WeixinAccessTokenController : ControllerBase
     {
-		private readonly IWeixinAccessTokenApi _weixinAccessToken;
+		private readonly IWeixinAccessTokenApi _api;
 
-		public WeixinAccessTokenController(IWeixinAccessTokenApi weixinAccessToken)
+		public WeixinAccessTokenController(IWeixinAccessTokenApi api)
 		{
-			_weixinAccessToken = weixinAccessToken;
+			_api = api;
 		}
 
 		public string GetToken()
 		{
-			return _weixinAccessToken.GetToken();
+			return _api.GetToken().AccessToken;
 		}
     }
 }

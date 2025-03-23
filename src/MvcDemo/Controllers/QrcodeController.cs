@@ -7,16 +7,16 @@ using Myvas.AspNetCore.Weixin;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Net;
-Master
+
 namespace Demo.Controllers
 {
     public class QrcodeController : Controller
     {
         private readonly ILogger _logger;
-        private readonly IQrcodeApi _api;
+        private readonly IWeixinQrcodeApi _api;
 
         public QrcodeController(ILoggerFactory loggerFactory,
-            IQrcodeApi api)
+            IWeixinQrcodeApi api)
         {
             _logger = loggerFactory?.CreateLogger<QrcodeController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _api = api;
