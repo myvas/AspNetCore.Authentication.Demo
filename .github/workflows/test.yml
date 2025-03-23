@@ -20,8 +20,8 @@ jobs:
     strategy:
       matrix:
         dotnet:
-          - version: '3.1.x'
-            framework: 'netcoreapp3.1'
+          - version: '8.0.x'
+            framework: 'net8.0'
         configuration: [ Debug, Release ]
     uses: ./.github/workflows/build-and-test.yml
     with:
