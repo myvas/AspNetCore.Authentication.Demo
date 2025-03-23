@@ -128,12 +128,17 @@ public static class HostExtensions
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapAreaControllerRoute("Identity", "Identity", "Identity/{controller=Home}/{action=Index}/{id?}");
-            endpoints.MapDefaultControllerRoute();
-            endpoints.MapRazorPages();
-        });
+        // Map area route for "Identity"
+        app.MapAreaControllerRoute(
+            name: "Identity",
+            areaName: "Identity",
+            pattern: "Identity/{controller=Home}/{action=Index}/{id?}");
+
+        // Map default controller route
+        app.MapDefaultControllerRoute();
+
+        // Map Razor Pages
+        app.MapRazorPages();
 
         return app;
     }
