@@ -46,10 +46,17 @@ jobs:
           script: |            
             sudo systemctl stop ${{ env.SERVICE_NAME }} || true
 
+      - name: Save the SSH private key to a file
+        run: |
+          whoami
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
       - name: Copy the published app to the server
         run: |
             rsync --version
-            sudo rsync -avz --exclude 'demo.sqlite' -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ secrets.SSH_USERNAME }}@demo.auth.myvas.com:${{ env.REMOTE_APP_DIR }}/
+            rsync -avz --exclude 'demo.sqlite' -e "ssh -i ~/.ssh/id_rsa" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ secrets.SSH_USERNAME }}@demo.auth.myvas.com:${{ env.REMOTE_APP_DIR }}/
 
       - name: Start the service
         uses: appleboy/ssh-action@v1
