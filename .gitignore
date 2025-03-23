@@ -239,7 +239,10 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-/.submodules
+.submodules
 **/*.sqlite
 **/*.sqlite-shm
 **/*.sqlite-wal
+**/serilog.*.json
+**/appsettings.*.json
+**/launchSettings.json
