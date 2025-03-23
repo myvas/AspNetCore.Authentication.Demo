@@ -14,6 +14,7 @@ env:
   PUBLISH_OUTPUT_DIR: './publish'
   REMOTE_APP_DIR: '/www/demo.auth.myvas.com'
   SERVICE_NAME: 'demo.auth.myvas.com'
+  SSH_HOST: 'demo.auth.myvas.com'
 
 jobs:
   build-and-deploy:
@@ -40,7 +41,7 @@ jobs:
       - name: Stop the service
         uses: appleboy/ssh-action@v1
         with:
-          host: demo.auth.myvas.com
+          host: ${{ env.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |            
@@ -53,15 +54,19 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
+      - name: Add remote server to known_hosts
+        run: |
+          ssh-keyscan ${{ env.SSH_HOST }} >> ~/.ssh/known_hosts
+
       - name: Copy the published app to the server
         run: |
             rsync --version
-            rsync -avz --exclude 'demo.sqlite' -e "ssh -i ~/.ssh/id_rsa" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ secrets.SSH_USERNAME }}@demo.auth.myvas.com:${{ env.REMOTE_APP_DIR }}/
+            rsync -avz --exclude 'demo.sqlite' -e "ssh -i ~/.ssh/id_rsa" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ secrets.SSH_USERNAME }}@${{ env.SSH_HOST }}:${{ env.REMOTE_APP_DIR }}/
 
       - name: Start the service
         uses: appleboy/ssh-action@v1
         with:
-          host: demo.auth.myvas.com
+          host: ${{ env.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |       
