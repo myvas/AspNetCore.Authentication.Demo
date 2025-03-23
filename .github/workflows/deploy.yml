@@ -63,6 +63,10 @@ jobs:
             rsync --version
             rsync -avz --exclude 'demo.sqlite' -e "ssh -i ~/.ssh/id_rsa" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ secrets.SSH_USERNAME }}@${{ env.SSH_HOST }}:${{ env.REMOTE_APP_DIR }}/
 
+            # Set permissions
+            sudo chown -R ${{ secrets.SSH_USERNAME }}:www-data ${{ env.REMOTE_APP_DIR }}
+            sudo chmod -R 775 ${{ env.REMOTE_APP_DIR }}
+
       - name: Start the service
         uses: appleboy/ssh-action@v1
         with:
