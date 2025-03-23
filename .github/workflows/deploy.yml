@@ -36,7 +36,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish --configuration Release --output ${{ env.PUBLISH_OUTPUT_DIR }}
+        run: dotnet publish src/MvcDemo --configuration Release --runtime linux-x64 --framework net8.0 --output ${{ env.PUBLISH_OUTPUT_DIR }}
 
       - name: Stop the service
         uses: appleboy/ssh-action@v1
