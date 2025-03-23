@@ -38,7 +38,7 @@ jobs:
         run: dotnet publish --configuration Release --output ${{ env.PUBLISH_OUTPUT_DIR }}
 
       - name: Deploy
-        uses: applyboy/ssh-action@v1
+        uses: appleboy/ssh-action@v1
         with:
           host: demo.auth.myvas.com
           username: ${{ secrets.SSH_USERNAME }}
