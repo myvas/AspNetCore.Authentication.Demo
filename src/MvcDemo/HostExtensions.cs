@@ -18,87 +18,91 @@ public static class HostExtensions
 
         builder.Services.AddControllersWithViews();
 
-        var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
-
-        builder.Services.AddDbContext<DemoDbContext>(options =>
-            options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"), sql => sql.MigrationsAssembly(migrationsAssembly)));
+        builder.Services.AddDbContext<DemoDbContext>(o =>
+        {
+            o.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+        });
 
         builder.Services.AddDefaultIdentity<IdentityUser>()
             .AddDefaultUI()
             .AddEntityFrameworkStores<DemoDbContext>();
-        builder.Services.Configure<IdentityOptions>(options =>
+        builder.Services.Configure<IdentityOptions>(o =>
         {
-            options.Password = new PasswordOptions
+            o.Password = new PasswordOptions
             {
                 RequireLowercase = false,
                 RequireUppercase = false,
                 RequireNonAlphanumeric = false,
                 RequireDigit = false
             };
-            options.User.RequireUniqueEmail = false;
-            options.SignIn.RequireConfirmedEmail = false;
+            o.User.RequireUniqueEmail = false;
+            o.SignIn.RequireConfirmedEmail = false;
 
-            options.SignIn.RequireConfirmedPhoneNumber = true;
+            o.SignIn.RequireConfirmedPhoneNumber = true;
         });
-        builder.Services.ConfigureApplicationCookie(options =>
+        builder.Services.ConfigureApplicationCookie(o =>
         {
-            options.LoginPath = "/Identity/Account/Login";
-            options.LogoutPath = "/Identity/Account/Logout";
-            options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            o.LoginPath = "/Identity/Account/Login";
+            o.LogoutPath = "/Identity/Account/Logout";
+            o.AccessDeniedPath = "/Identity/Account/AccessDenied";
         });
 
         builder.Services.AddAuthentication()
-        .AddWeixinOpen(options =>
+        .AddWeixinOpen(o =>
         {
-            options.AppId = Configuration["WeixinOpen:AppId"];
-            options.AppSecret = Configuration["WeixinOpen:AppSecret"];
-            options.SaveTokens = true;
+            o.AppId = Configuration["WeixinOpen:AppId"];
+            o.AppSecret = Configuration["WeixinOpen:AppSecret"];
+            o.SaveTokens = true;
         })
-        .AddWeixinAuth(options =>
+        .AddWeixinAuth(o =>
         {
-            options.AppId = Configuration["WeixinAuth:AppId"];
-            options.AppSecret = Configuration["WeixinAuth:AppSecret"];
-            options.SilentMode = false; //不采用静默模式
+            o.AppId = Configuration["WeixinAuth:AppId"];
+            o.AppSecret = Configuration["WeixinAuth:AppSecret"];
+            o.SilentMode = false; //不采用静默模式
             //options.SaveTokens = true;
         })
-        .AddQQConnect(options =>
+        .AddQQConnect(o =>
         {
-            options.AppId = Configuration["QQConnect:AppId"];
-            options.AppKey = Configuration["QQConnect:AppKey"];
+            o.AppId = Configuration["QQConnect:AppId"];
+            o.AppKey = Configuration["QQConnect:AppKey"];
             //options.SaveTokens = true;
 
-            QQConnectScopes.TryAdd(options.Scope,
+            QQConnectScopes.TryAdd(o.Scope,
                 QQConnectScopes.get_user_info,
                 QQConnectScopes.list_album,
                 QQConnectScopes.upload_pic,
                 QQConnectScopes.do_like);
         });
 
-        builder.Services.AddTencentSms(options =>
+        builder.Services.AddTencentSms(o =>
         {
-            options.SdkAppId = Configuration["TencentSms:SdkAppId"];
-            options.AppKey = Configuration["TencentSms:AppKey"];
+            o.SdkAppId = Configuration["TencentSms:SdkAppId"];
+            o.AppKey = Configuration["TencentSms:AppKey"];
         });
 
         builder.Services.AddViewDivert();
 
-        builder.Services.AddWeixin(options =>
+        builder.Services.AddWeixin(o =>
         {
-            options.AppId = Configuration["Weixin:AppId"];
-            options.AppSecret = Configuration["Weixin:AppSecret"];
+            o.AppId = Configuration["Weixin:AppId"];
+            o.AppSecret = Configuration["Weixin:AppSecret"];
         })
         .AddAccessTokenRedisCacheProvider(o =>
         {
             o.Configuration = Configuration.GetConnectionString("RedisConnection");
-            o.InstanceName = migrationsAssembly;
         })
         .AddWeixinSite(o =>
         {
-            o.Debug = true;
+            o.Debug = true; // for this demo for debugging
+            //o.Path = "/wx"; // It's the default
             o.WebsiteToken = Configuration["Weixin:WebsiteToken"];
             //o.EncodingAESKey = Configuration["Weixin:EncodingAESKey"];
         })
-        .AddWeixinEfCore<DemoDbContext>();
+        .AddWeixinEfCore<DemoDbContext>(o =>
+        {
+            o.EnableSyncForWeixinSubscribers = true;
+            o.SyncIntervalInMinutesForWeixinSubscribers = 60;
+        });
 
         return builder.Build();
     }
