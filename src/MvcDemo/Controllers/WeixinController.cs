@@ -1,9 +1,8 @@
-﻿using Demo.Data;
 using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Myvas.AspNetCore.Weixin;
-using Myvas.AspNetCore.Weixin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,57 +12,77 @@ namespace Demo.Controllers
 {
     public class WeixinController : Controller
     {
-        private readonly DemoDbContext _db;
-        private readonly ILogger<HomeController> _logger;
-        private readonly IWeixinAccessTokenApi _weixinAccessToken;
-        private readonly UserApi _api;
-        private readonly CustomerSupportApi Custom;
-        private readonly ISubscriberStore<Subscriber> _subscriberStore;
-        private readonly IReceivedEntryStore<MessageReceivedEntry> _messageStore;
+        private readonly ILogger<WeixinController> _logger;
+        private readonly IWeixinUserApi _api;
+        private readonly IWeixinCustomerSupportApi _csApi;
+        private readonly IWeixinSubscriberStore _subscriberStore;
+        private readonly IWeixinResponseMessageStore<WeixinResponseMessageEntity> _messageStore;
+        private readonly IWeixinReceivedEventStore<WeixinReceivedEventEntity> _eventStore;
 
         public WeixinController(
-            DemoDbContext db,
-            ILoggerFactory loggerFactory,
-            UserApi api,
-            CustomerSupportApi csApi,
-            ISubscriberStore<Subscriber> subscriberStore,
-            IReceivedEntryStore<MessageReceivedEntry> messageStore,
-            IWeixinAccessTokenApi smsSender)
+            ILogger<WeixinController> logger,
+            IWeixinUserApi api,
+            IWeixinCustomerSupportApi csApi,
+            IWeixinSubscriberStore subscriberStore,
+            IWeixinResponseMessageStore<WeixinResponseMessageEntity> messageStore,
+            IWeixinReceivedEventStore<WeixinReceivedEventEntity> eventStore)
         {
-            _db = db ?? throw new ArgumentNullException(nameof(db));
-            _logger = loggerFactory?.CreateLogger<HomeController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _api = api;
-            Custom = csApi;
+            _csApi = csApi;
             _subscriberStore = subscriberStore ?? throw new ArgumentNullException(nameof(subscriberStore));
             _messageStore = messageStore ?? throw new ArgumentNullException(nameof(messageStore));
-            _weixinAccessToken = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
+            _eventStore = eventStore ?? throw new ArgumentNullException(nameof(eventStore));
         }
 
         public async Task<IActionResult> Index()
         {
-            var subscriberCount = await _subscriberStore.GetSubscribersCountAsync();
-            var receivedTextCount = await _messageStore.GetAllByReceivedTimeAsync(null, null);
-            var vm = new WeixinIndexViewModel() { SubscriberCount = subscriberCount, ReceivedTextCount = receivedTextCount.Count() };
+            var subscriberCount = await _subscriberStore.Items.CountAsync();//.GetSubscribersCountAsync();
+            var receivedTextCount = await _messageStore.Items.CountAsync();//.GetAllByReceivedTimeAsync(null, null);
+            var vm = new WeixinIndexViewModel() { SubscriberCount = subscriberCount, ReceivedTextCount = receivedTextCount };
 
             return View(vm);
         }
 
-        public async Task<IActionResult> Subscribers()
+        public async Task<IActionResult> Subscribers(int? n)
         {
-            var vm = new ReturnableViewModel<IList<UserInfoJson>>();
+            const int pageSize = 50;
 
-            var token = await _weixinAccessToken.GetTokenAsync();
-            var subscribers = await _api.GetAllUserInfo(token);
+            var totalRecords = await _subscriberStore.GetCountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            if (n == null) n = 1;
+            else if (n.Value < 1) n = 1;
+            else if (n > totalPages) n = totalPages;
+
+            var vm = new ReturnableViewModel<IList<WeixinSubscriberEntity>>();
+
+            var pageIndex = n.Value - 1;
+            var subscribers = await _subscriberStore.GetItemsAsync(pageSize, pageIndex);
+            _logger.LogDebug($"微信订阅者在数据库中共{totalRecords}条记录。");
             vm.Item = subscribers;
 
             return View(vm);
         }
 
 
-        public async Task<IActionResult> ReceivedText()
+        public async Task<IActionResult> ReceivedText(int? n)
         {
-            var items = await _messageStore.GetAllByReceivedTimeAsync(null, null);
-            _logger.LogDebug($"微信文本消息在数据库中共{items.Count()}条记录。");
+            const int pageSize = 50;
+
+            var totalRecords = await _messageStore.GetCountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            if (n == null) n = 1;
+            else if (n.Value < 1) n = 1;
+            else if (n > totalPages) n = totalPages;
+
+            var vm = new ReturnableViewModel<IList<WeixinReceivedMessageEntity>>();
+
+            var pageIndex = n.Value - 1;
+
+            var items = await _messageStore.GetItemsAsync(pageSize, pageIndex);
+            _logger.LogDebug($"微信文本消息在数据库中共{totalRecords}条记录。");
             return View(items);
         }
 
@@ -76,7 +95,7 @@ namespace Demo.Controllers
 
             var vm = new SendWeixinViewModel
             {
-                Received = await _messageStore.GetAllByToUserNameAsync(openId),
+                Received = await _messageStore.Items.Where(x => x.ToUserName == openId).ToListAsync(),
                 OpenId = openId
             };
             return View(vm);
@@ -91,8 +110,7 @@ namespace Demo.Controllers
                 return View(vm);
             }
 
-            var token = await _weixinAccessToken.GetTokenAsync();
-            var result = await Custom.SendText(token, vm.OpenId, vm.Content);
+            var result = await _csApi.SendText(vm.OpenId, vm.Content);
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("", result.ErrorMessage);
