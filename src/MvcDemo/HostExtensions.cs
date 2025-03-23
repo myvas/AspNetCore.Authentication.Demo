@@ -1,15 +1,12 @@
-﻿using Demo.Applications;
 using Demo.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Myvas.AspNetCore.Authentication;
 using Myvas.AspNetCore.Weixin;
-using Myvas.AspNetCore.Weixin.Models;
 
 namespace Demo;
 
@@ -51,31 +48,31 @@ public static class HostExtensions
         });
 
         builder.Services.AddAuthentication()
-            .AddWeixinOpen(options =>
-            {
-                options.AppId = Configuration["WeixinOpen:AppId"];
-                options.AppSecret = Configuration["WeixinOpen:AppSecret"];
-                options.SaveTokens = true;
-            })
-            .AddWeixinAuth(options =>
-            {
-                options.AppId = Configuration["WeixinAuth:AppId"];
-                options.AppSecret = Configuration["WeixinAuth:AppSecret"];
-                options.SilentMode = false; //不采用静默模式
-                //options.SaveTokens = true;
-            })
-            .AddQQConnect(options =>
-            {
-                options.AppId = Configuration["QQConnect:AppId"];
-                options.AppKey = Configuration["QQConnect:AppKey"];
-                //options.SaveTokens = true;
+        .AddWeixinOpen(options =>
+        {
+            options.AppId = Configuration["WeixinOpen:AppId"];
+            options.AppSecret = Configuration["WeixinOpen:AppSecret"];
+            options.SaveTokens = true;
+        })
+        .AddWeixinAuth(options =>
+        {
+            options.AppId = Configuration["WeixinAuth:AppId"];
+            options.AppSecret = Configuration["WeixinAuth:AppSecret"];
+            options.SilentMode = false; //不采用静默模式
+            //options.SaveTokens = true;
+        })
+        .AddQQConnect(options =>
+        {
+            options.AppId = Configuration["QQConnect:AppId"];
+            options.AppKey = Configuration["QQConnect:AppKey"];
+            //options.SaveTokens = true;
 
-                QQConnectScopes.TryAdd(options.Scope,
-                    QQConnectScopes.get_user_info,
-                    QQConnectScopes.list_album,
-                    QQConnectScopes.upload_pic,
-                    QQConnectScopes.do_like);
-            });
+            QQConnectScopes.TryAdd(options.Scope,
+                QQConnectScopes.get_user_info,
+                QQConnectScopes.list_album,
+                QQConnectScopes.upload_pic,
+                QQConnectScopes.do_like);
+        });
 
         builder.Services.AddTencentSms(options =>
         {
@@ -86,22 +83,22 @@ public static class HostExtensions
         builder.Services.AddViewDivert();
 
         builder.Services.AddWeixin(options =>
-            {
-                options.AppId = Configuration["Weixin:AppId"];
-                options.AppSecret = Configuration["Weixin:AppSecret"];
-            })
-            .AddAccessToken(o =>
-            {
-                o.Configuration = Configuration.GetConnectionString("RedisConnection");
-                o.InstanceName = migrationsAssembly;
-            })
-            .AddWeixinSite<DemoWeixinEventSink, Subscriber, DemoDbContext>(o =>
-            {
-                o.Debug = true;
-                o.WebsiteToken = Configuration["Weixin:WebsiteToken"];
-                //o.EncodingAESKey = Configuration["Weixin:EncodingAESKey"];
-            })
-            .AddJssdk();
+        {
+            options.AppId = Configuration["Weixin:AppId"];
+            options.AppSecret = Configuration["Weixin:AppSecret"];
+        })
+        .AddAccessTokenRedisCacheProvider(o =>
+        {
+            o.Configuration = Configuration.GetConnectionString("RedisConnection");
+            o.InstanceName = migrationsAssembly;
+        })
+        .AddWeixinSite(o =>
+        {
+            o.Debug = true;
+            o.WebsiteToken = Configuration["Weixin:WebsiteToken"];
+            //o.EncodingAESKey = Configuration["Weixin:EncodingAESKey"];
+        })
+        .AddWeixinEfCore<DemoDbContext>();
 
         return builder.Build();
     }
