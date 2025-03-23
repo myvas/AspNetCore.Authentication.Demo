@@ -136,11 +136,11 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             ToUserName = e.Xml.FromUserName,
             FromUserName = e.Xml.ToUserName,
             CreateTime = DateTime.Now,
-            Articles = [new WeixinResponseNewsArticle{
+            Articles = new List<WeixinResponseNewsArticle>(){new WeixinResponseNewsArticle{
                 Title = $"收到一条链接消息: {e.Xml.Title}",
                 Description = e.Xml.Description,
                 Url = e.Xml.Url
-            }]
+            }}
         };
         await new WeixinResponseXmlBuilder(e.Context.Context)
         {
@@ -239,12 +239,12 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             ToUserName = e.Xml.FromUserName,
             FromUserName = e.Xml.ToUserName,
             CreateTime = DateTime.Now,
-            Articles = [new WeixinResponseNewsArticle{
+            Articles = new List<WeixinResponseNewsArticle>(){new WeixinResponseNewsArticle{
                 Title = "收到一条图片信息",
                 Description = "您发送的图片将会显示在边上",
                 PicUrl = e.Xml.PicUrl,
                 Url = "http://demo.auth.myvas.com"
-            }]
+            }}
         };
         await new WeixinResponseXmlBuilder(e.Context.Context)
         {
@@ -290,14 +290,14 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             ToUserName = e.Xml.FromUserName,
             FromUserName = e.Xml.ToUserName,
             CreateTime = DateTime.Now,
-            Articles = [new WeixinResponseNewsArticle{
+            Articles = new List<WeixinResponseNewsArticle>(){new WeixinResponseNewsArticle{
             Title = "定位地点周边地图",
                 Description = string.Format("您刚才发送了地理位置信息。Location_X：{0}，Location_Y：{1}，Scale：{2}，标签：{3}",
                     e.Xml.Latitude, e.Xml.Longitude,
                     e.Xml.Scale, e.Xml.Label),
                 PicUrl = mapUrl,
                 Url = mapUrl
-            }]
+            }}
         };
         await new WeixinResponseXmlBuilder(e.Context.Context)
         {
@@ -343,14 +343,14 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             ToUserName = e.Xml.FromUserName,
             FromUserName = e.Xml.ToUserName,
             CreateTime = DateTime.Now,
-            Articles = [new WeixinResponseNewsArticle{
+            Articles = new List<WeixinResponseNewsArticle>(){new WeixinResponseNewsArticle{
             Title = "定位地点周边地图",
                 Description = string.Format("您刚才发送了地理位置信息。Location_X：{0}，Location_Y：{1}，Precision： {2}",
                     e.Xml.Latitude, e.Xml.Longitude,
                     e.Xml.Precision),
                 PicUrl = mapUrl,
                 Url = mapUrl
-            }]
+            }}
         };
         await new WeixinResponseXmlBuilder(e.Context.Context)
         {
