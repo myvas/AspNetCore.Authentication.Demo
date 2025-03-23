@@ -1,4 +1,4 @@
-﻿namespace Demo.Models
+namespace Demo.Models
 {
     public class WeixinIndexViewModel
     {

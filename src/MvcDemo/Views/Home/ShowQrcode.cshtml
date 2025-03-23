@@ -1,4 +1,4 @@
-﻿
+@using System.Net
 @{
     ViewData["Title"] = "ShowQrcode";
 }
@@ -15,9 +15,7 @@ Pls scan below qrcode to login:
     <script type="text/javascript">
         $('#qrcode-container').qrcode(
             {
-                text: "@Html.Raw(Context.Request.Query["redirectUrl"])"
+                text: "@Html.Raw(WebUtility.HtmlEncode(Context.Request.Query["redirectUrl"]))"
             });
     </script>
 }
-
-
