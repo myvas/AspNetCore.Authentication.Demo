@@ -48,8 +48,9 @@ jobs:
 
       - name: Copy the published app to the server
         run: |
-            apt-get install rsync
-            rsync -avz --exclude 'demo.sqlite' -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ${{ env.PUBLISH_OUT_DIR }}/ ${{ env.SSH_USERNAME }}@demo.auth.myvas.com:${{ env.REMOTE_APP_DIR }}/
+            rsync --version
+            sudo apt-get install rsync
+            sudo rsync -avz --exclude 'demo.sqlite' -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ${{ env.PUBLISH_OUT_DIR }}/ ${{ env.SSH_USERNAME }}@demo.auth.myvas.com:${{ env.REMOTE_APP_DIR }}/
 
       - name: Start the service
         uses: appleboy/ssh-action@v1
