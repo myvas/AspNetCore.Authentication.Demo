@@ -15,6 +15,7 @@ env:
   REMOTE_APP_DIR: '/www/demo.auth.myvas.com'
   SERVICE_NAME: 'demo.auth.myvas.com'
   SSH_HOST: 'demo.auth.myvas.com'
+  SSH_USERNAME: 'deploy-myvas-auth-demo'
 
 jobs:
   build-and-deploy:
@@ -42,7 +43,7 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ env.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
+          username: ${{ env.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |            
             sudo systemctl stop ${{ env.SERVICE_NAME }} || true
@@ -61,17 +62,17 @@ jobs:
       - name: Copy the published app to the server
         run: |
             rsync --version
-            rsync -avz --exclude 'demo.sqlite' -e "ssh -i ~/.ssh/id_rsa" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ secrets.SSH_USERNAME }}@${{ env.SSH_HOST }}:${{ env.REMOTE_APP_DIR }}/
+            rsync -avz --exclude 'demo.sqlite' -e "ssh -i ~/.ssh/id_rsa" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ env.SSH_USERNAME }}@${{ env.SSH_HOST }}:${{ env.REMOTE_APP_DIR }}/
 
             # Set permissions
-            sudo chown -R deploy-myvas-auth-demo:www-data ${{ env.REMOTE_APP_DIR }}
+            sudo chown -R ${{ env.SSH_USERNAME }}:www-data ${{ env.REMOTE_APP_DIR }}
             sudo chmod -R 775 ${{ env.REMOTE_APP_DIR }}
 
       - name: Start the service
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ env.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
+          username: ${{ env.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |       
             # Restart the service (if applicable)
