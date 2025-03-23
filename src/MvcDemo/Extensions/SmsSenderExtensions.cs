@@ -6,13 +6,13 @@ namespace Myvas.AspNetCore.TencentSms
     public static class TencentSmsSenderExtensions
     {
         /// <summary>
-        /// ·¢ËÍÑéÖ¤Âë¶ÌĞÅ
+        /// å‘é€éªŒè¯ç çŸ­ä¿¡
         /// </summary>
         /// <param name="_smsSender"></param>
         /// <param name="vcode"></param>
         public static async Task<bool> SendVcodeAsync(this ISmsSender _smsSender, string mobile, string vcode)
         {
-            var codeText = $"¡¾ĞÂ¹ãÖİÈë»§¡¿{vcode}ÎªÄúµÄÑéÖ¤Âë¡£Èç·Ç±¾ÈË²Ù×÷£¬ÇëºöÂÔ±¾¶ÌĞÅ¡£";
+            var codeText = $"ã€æ–°å¹¿å·å…¥æˆ·ã€‘{vcode}ä¸ºæ‚¨çš„éªŒè¯ç ã€‚å¦‚éæœ¬äººæ“ä½œï¼Œè¯·å¿½ç•¥æœ¬çŸ­ä¿¡ã€‚";
             return await _smsSender.SendSmsAsync(mobile, codeText);
         }
     }
