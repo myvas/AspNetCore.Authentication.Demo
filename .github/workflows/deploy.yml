@@ -37,19 +37,27 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release --output ${{ env.PUBLISH_OUTPUT_DIR }}
 
-      - name: Deploy
+      - name: Stop the service
         uses: appleboy/ssh-action@v1
         with:
           host: demo.auth.myvas.com
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # Stop the service (if applicable)
+          script: |            
             sudo systemctl stop ${{ env.SERVICE_NAME }} || true
 
-            # Copy the published app to the server
-            sudo rsync -avz --exclude 'demo.sqlite' ${{ env.PUBLISH_OUT_DIR }}/ ${{ env.REMOTE_APP_DIR }}/
+      - name: Copy the published app to the server
+        run: |
+            apt-get install rsync
+            rsync -avz --exclude 'demo.sqlite' -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ${{ env.PUBLISH_OUT_DIR }}/ ${{ env.SSH_USERNAME }}@demo.auth.myvas.com:${{ env.REMOTE_APP_DIR }}/
 
+      - name: Start the service
+        uses: appleboy/ssh-action@v1
+        with:
+          host: demo.auth.myvas.com
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |       
             # Restart the service (if applicable)
             sudo systemctl start ${{ env.SERVICE_NAME }}
       
