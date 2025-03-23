@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Myvas.AspNetCore.Weixin;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Threading.Tasks;
 using Demo.Data;
@@ -14,29 +14,25 @@ namespace Demo.Controllers
     public class WeixinMenuController : Controller
     {
         private readonly DemoDbContext _context;
-        private readonly IWeixinAccessTokenApi _weixinAccessToken;
         private readonly ILogger<WeixinMenuController> _logger;
-        private readonly MenuApi _api;
+        private readonly IWeixinMenuApi _api;
 
         public WeixinMenuController(DemoDbContext context,
-            IWeixinAccessTokenApi weixinAccessToken,
-            MenuApi api,
+            IWeixinMenuApi api,
             ILogger<WeixinMenuController> logger)
         {
-            _context = context;
-            _weixinAccessToken = weixinAccessToken;
-            _api = api;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _api = api ?? throw new ArgumentNullException(nameof(api));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<IActionResult> Index()
         {
-            var token = await _weixinAccessToken.GetTokenAsync();
-            var menu = await _api.GetMenuAsync(token);
+            var menu = await _api.GetMenuAsync();
 
             var vm = new WeixinJsonViewModel
             {
-                Json = WeixinJsonHelper.Serialize(menu)// JsonConvert.SerializeObject(resultJson, Formatting.Indented)
+                Json = JsonSerializer.Serialize(menu)// JsonConvert.SerializeObject(resultJson, Formatting.Indented)
             };
             return View(vm);
         }
@@ -49,8 +45,7 @@ namespace Demo.Controllers
             {
                 if (!string.IsNullOrEmpty(vm.Json))
                 {
-                    var token = await _weixinAccessToken.GetTokenAsync();
-                    var result = await _api.CreateMenuAsync(token, vm.Json);
+                    var result = await _api.PublishMenuAsync(vm.Json);
 
                     _logger.LogDebug(result.ToString());
 
