@@ -1,0 +1,55 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: deploy
+permissions:
+  contents: read
+  pull-requests: write
+on:
+  workflow_dispatch:
+  release:
+    types: [ published ]
+
+env:
+  PUBLISH_OUTPUT_DIR: './publish'
+  REMOTE_APP_DIR: '/www/demo.auth.myvas.com'
+  SERVICE_NAME: 'demo.auth.myvas.com'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish --configuration Release --output ${{ env.PUBLISH_OUTPUT_DIR }}
+
+      - name: Deploy
+        uses: applyboy/ssh-action@v1
+        with:
+          host: demo.auth.myvas.com
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Stop the service (if applicable)
+            sudo systemctl stop ${{ env.SERVICE_NAME }} || true
+
+            # Copy the published app to the server
+            sudo rsync -avz --exclude 'demo.sqlite' ${{ env.PUBLISH_OUT_DIR }}/ ${{ env.REMOTE_APP_DIR }}/
+
+            # Restart the service (if applicable)
+            sudo systemctl start ${{ env.SERVICE_NAME }}
+      
