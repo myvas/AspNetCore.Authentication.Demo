@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.32126.317
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{672FEA18-F072-4549-9C4C-DBD1F9CDC7BB}"
 EndProject
@@ -19,6 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_", "_", "{E9754587-13F5-4E
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo", "src\MvcDemo\Demo.csproj", "{DD4989EF-EBF5-4FE9-BBDB-04A722DFBB98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Shared", "src\Core\Demo.Shared\Demo.Shared.csproj", "{FD6D39EB-05EB-4F9C-8547-0880A6AF25ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Data.Host", "src\Core\Demo.Data.Host\Demo.Data.Host.csproj", "{69FD9DCC-3F64-430E-8722-CA33A58E3ED4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Data", "src\Core\Demo.Data\Demo.Data.csproj", "{FD8A1277-9337-4B0B-8800-AA269AC317BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +45,9 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DD4989EF-EBF5-4FE9-BBDB-04A722DFBB98} = {672FEA18-F072-4549-9C4C-DBD1F9CDC7BB}
+		{FD6D39EB-05EB-4F9C-8547-0880A6AF25ED} = {672FEA18-F072-4549-9C4C-DBD1F9CDC7BB}
+		{69FD9DCC-3F64-430E-8722-CA33A58E3ED4} = {672FEA18-F072-4549-9C4C-DBD1F9CDC7BB}
+		{FD8A1277-9337-4B0B-8800-AA269AC317BF} = {672FEA18-F072-4549-9C4C-DBD1F9CDC7BB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AEDFD1F-BBE1-4727-9978-2FB04DCE84AF}
