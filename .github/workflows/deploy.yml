@@ -49,8 +49,8 @@ jobs:
 
       - name: Save the SSH private key to a file
         run: |
-          mkdir -p ~/.ssh
           if [ ! -f ~/.ssh/id_rsa ]; then
+            mkdir -p ~/.ssh
             echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
           fi
