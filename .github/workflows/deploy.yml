@@ -4,7 +4,6 @@
 name: deploy
 permissions:
   contents: read
-  pull-requests: write
 on:
   workflow_dispatch:
   release:
@@ -37,7 +36,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish src/MvcDemo --configuration Release --runtime linux-x64 --framework net8.0 --output ${{ env.PUBLISH_OUTPUT_DIR }}
+        run: dotnet publish src/MvcDemo --configuration Release --runtime linux-x64 --output ${{ env.PUBLISH_OUTPUT_DIR }}
 
       - name: Stop the service
         uses: appleboy/ssh-action@v1
@@ -45,12 +44,12 @@ jobs:
           host: ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |            
+          script: |
+            # Stop the service (if applicable)
             sudo systemctl stop ${{ env.SERVICE_NAME }} || true
 
       - name: Save the SSH private key to a file
         run: |
-          whoami
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
@@ -64,17 +63,17 @@ jobs:
             rsync --version
             rsync -avz --exclude 'demo.sqlite' -e "ssh -i ~/.ssh/id_rsa" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ env.SSH_USERNAME }}@${{ env.SSH_HOST }}:${{ env.REMOTE_APP_DIR }}/
 
-            # Set permissions
-            sudo chown -R '${{ env.SSH_USERNAME }}':'www-data' ${{ env.REMOTE_APP_DIR }}
-            sudo chmod -R 775 ${{ env.REMOTE_APP_DIR }}
-
       - name: Start the service
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |       
+          script: |
+            # Set permissions
+            sudo chown -R '${{ env.SSH_USERNAME }}':'www-data' ${{ env.REMOTE_APP_DIR }}
+            sudo chmod -R 775 ${{ env.REMOTE_APP_DIR }}
+
             # Restart the service (if applicable)
             sudo systemctl start ${{ env.SERVICE_NAME }}
       
