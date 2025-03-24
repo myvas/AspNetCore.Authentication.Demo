@@ -55,7 +55,9 @@ jobs:
 
       - name: Add remote server to known_hosts
         run: |
-          ssh-keyscan ${{ env.SSH_HOST }} >> ~/.ssh/known_hosts
+          if ! grep -q "${{ env.SSH_HOST }}" ~/.ssh/known_hosts; then
+            ssh-keyscan ${{ env.SSH_HOST }} >> ~/.ssh/known_hosts
+          fi
 
       - name: Copy the published app to the server
         run: |
