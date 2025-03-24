@@ -50,8 +50,10 @@ jobs:
       - name: Save the SSH private key to a file
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          if [ ! -f ~/.ssh/id_rsa ]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+          fi
 
       - name: Add remote server to known_hosts
         run: |
