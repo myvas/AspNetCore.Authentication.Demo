@@ -14,9 +14,9 @@
     RestartSec=10
 #Restart service after 10 seconds if dotnet service crashes
     SyslogIdentifier=demo.auth.myvas.com
-    User=root
+    User=www-data
     Environment=ASPNETCORE_ENVIRONMENT=Production
-    Environment=ASPNETCORE_URLS=http://*:6605
+    Environment=ASPNETCORE_URLS=http://*:6308
 
 
     [Install]
