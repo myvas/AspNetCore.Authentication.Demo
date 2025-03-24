@@ -14,7 +14,6 @@ env:
   REMOTE_APP_DIR: '/www/demo.auth.myvas.com'
   SERVICE_NAME: 'demo.auth.myvas.com'
   SSH_HOST: 'demo.auth.myvas.com'
-  SSH_USERNAME: 'deploy-myvas-auth-demo'
 
 jobs:
   build-and-deploy:
@@ -42,7 +41,7 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ env.SSH_HOST }}
-          username: ${{ env.SSH_USERNAME }}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # Stop the service (if applicable)
@@ -50,28 +49,32 @@ jobs:
 
       - name: Save the SSH private key to a file
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          if [ ! -f ~/.ssh/id_rsa ]; then
+            mkdir -p ~/.ssh
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+          fi
 
       - name: Add remote server to known_hosts
         run: |
-          ssh-keyscan ${{ env.SSH_HOST }} >> ~/.ssh/known_hosts
+          if ! grep -q "${{ env.SSH_HOST }}" ~/.ssh/known_hosts; then
+            ssh-keyscan ${{ env.SSH_HOST }} >> ~/.ssh/known_hosts
+          fi
 
       - name: Copy the published app to the server
         run: |
-            rsync --version
-            rsync -avz --exclude 'demo.sqlite' -e "ssh -i ~/.ssh/id_rsa" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ env.SSH_USERNAME }}@${{ env.SSH_HOST }}:${{ env.REMOTE_APP_DIR }}/
+          rsync --version
+          rsync -avz --exclude 'demo.sqlite' -e "ssh -i ~/.ssh/id_rsa" ${{ env.PUBLISH_OUTPUT_DIR }}/ ${{ secrets.SSH_USERNAME }}@${{ env.SSH_HOST }}:${{ env.REMOTE_APP_DIR }}/
 
       - name: Start the service
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ env.SSH_HOST }}
-          username: ${{ env.SSH_USERNAME }}
+          username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # Set permissions
-            sudo chown -R '${{ env.SSH_USERNAME }}':'www-data' ${{ env.REMOTE_APP_DIR }}
+            sudo chown -R ${{ secrets.SSH_USERNAME }}:www-data ${{ env.REMOTE_APP_DIR }}
             sudo chmod -R 775 ${{ env.REMOTE_APP_DIR }}
 
             # Restart the service (if applicable)
