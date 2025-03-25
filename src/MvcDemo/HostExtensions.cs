@@ -102,7 +102,8 @@ public static class HostExtensions
         {
             o.EnableSyncForWeixinSubscribers = true;
             o.SyncIntervalInMinutesForWeixinSubscribers = 60;
-        });
+        })
+        .AddWeixinEventSink<DemoEventSink>();
 
         return builder.Build();
     }
