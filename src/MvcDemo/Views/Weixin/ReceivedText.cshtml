@@ -1,11 +1,10 @@
-﻿@model ReturnableViewModel<IList<WeixinReceivedMessageEntity>>
+@model ReturnableViewModel<IList<WeixinReceivedMessageEntity>>
 
 @{
     ViewData["Title"] = "Received Text";
 }
 
 <h2>@ViewData["Title"] (@Model.Item.Count())</h2>
-
 
 @foreach (var item in Model.Item)
 {

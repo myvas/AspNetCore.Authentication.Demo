@@ -1,6 +1,7 @@
 # Myvas.AspNetCore.Authentication.Demo
 
-This repo (Branch 6.0) deployed on <http://demo.auth.myvas.com>
+This repo is auto deployed on <https://demo.auth.myvas.com>
+
 OS: Debian GNU/Linux 11 (bullseye) x86_64
 
 ## Components
@@ -74,12 +75,10 @@ OS: Debian GNU/Linux 11 (bullseye) x86_64
 
 ### QQ开放平台配置 QQConnect <https://connect.qq.com>
 
-(TODO:在此添加配置说明)
-
 ![Screenshot](assets/secrets-QQConnect.png)
 
 ## For developers
 
-- [Visual Studio 2022](https://visualstudio.microsoft.com) | [Visual Studio Code](https://code.visualstudio.com)
-- [.NET 6.0](https://dotnet.microsoft.com/download/dotnet-core/6.0)
+- [Visual Studio Code](https://code.visualstudio.com) | [Visual Studio 2022](https://visualstudio.microsoft.com)
+- [.NET 8.0](https://dotnet.microsoft.com/download/dotnet-core/8.0)
 - [微信开发者工具](https://mp.weixin.qq.com/debug/wxadoc/dev/devtools/download.html)

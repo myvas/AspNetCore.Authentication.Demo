@@ -1,42 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Myvas.AspNetCore.Weixin;
 using Myvas.AspNetCore.Weixin.EfCore;
 
-namespace Demo.Applications;
+namespace Myvas.AspNetCore.Weixin;
 
-public class DemoWeixinEventSink : DemoWeixinEventSink<WeixinSubscriberEntity, string>
-{
-    public DemoWeixinEventSink(IOptions<WeixinSiteOptions> optionsAccessor,
-        ILogger<WeixinEfCoreEventSink<WeixinSubscriberEntity, string>> logger,
-        IWeixinReceivedMessageStore<WeixinReceivedMessageEntity> messageStore,
-        IWeixinReceivedEventStore<WeixinReceivedEventEntity> eventStore,
-        IWeixinSubscriberStore<WeixinSubscriberEntity, string> subscriberStore)
-        : base(optionsAccessor, logger, messageStore, eventStore, subscriberStore)
-    {
-    }
-}
-
-public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEventSink
-    where TWeixinSubscriberEntity : class, IWeixinSubscriberEntity<TKey>, new()
-    where TKey : IEquatable<TKey>
+public class DemoEventSink : WeixinTraceEventSink
 {
     protected readonly IWeixinReceivedEventStore<WeixinReceivedEventEntity> _eventStore;
 
     protected readonly IWeixinReceivedMessageStore<WeixinReceivedMessageEntity> _messageStore;
 
-    protected readonly IWeixinSubscriberStore<TWeixinSubscriberEntity, TKey> _subscriberStore;
+    protected readonly IWeixinSubscriberStore _subscriberStore;
 
-    public DemoWeixinEventSink(IOptions<WeixinSiteOptions> optionsAccessor,
-        ILogger<WeixinEfCoreEventSink<TWeixinSubscriberEntity, TKey>> logger,
-        IWeixinReceivedMessageStore<WeixinReceivedMessageEntity> messageStore,
-        IWeixinReceivedEventStore<WeixinReceivedEventEntity> eventStore,
-        IWeixinSubscriberStore<TWeixinSubscriberEntity, TKey> subscriberStore)
+    public DemoEventSink(IOptions<WeixinSiteOptions> optionsAccessor,
+        ILogger<DemoEventSink> logger,
+        IWeixinReceivedMessageStore messageStore,
+        IWeixinReceivedEventStore eventStore,
+        IWeixinSubscriberStore subscriberStore)
         : base(optionsAccessor, logger)
     {
         _messageStore = messageStore ?? throw new ArgumentNullException(nameof(messageStore));
@@ -102,7 +86,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             _logger.LogTrace(ex.InnerException ?? ex, ex.InnerException?.Message ?? ex.Message);
         }
 
-        var echo = $"收到一条微信文本消息：{e.Xml.Content}";
+        var echo = $"Content: {e.Xml.Content}";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
@@ -137,7 +121,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             FromUserName = e.Xml.ToUserName,
             CreateTime = DateTime.Now,
             Articles = new List<WeixinResponseNewsArticle>(){new WeixinResponseNewsArticle{
-                Title = $"收到一条链接消息: {e.Xml.Title}",
+                Title = $"{e.Xml.Title}",
                 Description = e.Xml.Description,
                 Url = e.Xml.Url
             }}
@@ -167,7 +151,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             _logger.LogTrace(ex.InnerException ?? ex, ex.InnerException?.Message ?? ex.Message);
         }
 
-        var echo = $"收到一条视频消息，ID： {e.Xml.MediaId}";
+        var echo = $"MediaId: {e.Xml.MediaId}, ThumbMediaId: {e.Xml.ThumbMediaId}";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
@@ -190,7 +174,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
         }
 
 
-        var echo = $"收到一条短视频消息，ID： {e.Xml.MediaId}";
+        var echo = $"MediaId: {e.Xml.MediaId}, ThumbMediaId: {e.Xml.ThumbMediaId}";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
@@ -212,7 +196,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             _logger.LogTrace(ex.InnerException ?? ex, ex.InnerException?.Message ?? ex.Message);
         }
 
-        var echo = $"收到一条语音消息，ID： {e.Xml.MediaId}";
+        var echo = $"Format: {e.Xml.Format}, MediaId: {e.Xml.MediaId}, Recognition: {e.Xml.Recognition}";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
@@ -275,8 +259,8 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
         {
             new()
             {
-                Latitude = e.Xml.Latitude,
                 Longitude = e.Xml.Longitude,
+                Latitude = e.Xml.Latitude,
                 Color = "red",
                 Label = "S",
                 Size = GoogleMapMarkerSize.Default,
@@ -292,8 +276,8 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             CreateTime = DateTime.Now,
             Articles = new List<WeixinResponseNewsArticle>(){new WeixinResponseNewsArticle{
             Title = "定位地点周边地图",
-                Description = string.Format("您刚才发送了地理位置信息。Location_X：{0}，Location_Y：{1}，Scale：{2}，标签：{3}",
-                    e.Xml.Latitude, e.Xml.Longitude,
+                Description = string.Format("Longitude: {0}, Latitude: {1}, Scale: {2}, Label: {3}",
+                    e.Xml.Longitude, e.Xml.Latitude,
                     e.Xml.Scale, e.Xml.Label),
                 PicUrl = mapUrl,
                 Url = mapUrl
@@ -328,8 +312,8 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
         {
             new()
             {
-                Latitude = e.Xml.Latitude,
                 Longitude = e.Xml.Longitude,
+                Latitude = e.Xml.Latitude,
                 Color = "red",
                 Label = "S",
                 Size = GoogleMapMarkerSize.Default,
@@ -345,8 +329,8 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             CreateTime = DateTime.Now,
             Articles = new List<WeixinResponseNewsArticle>(){new WeixinResponseNewsArticle{
             Title = "定位地点周边地图",
-                Description = string.Format("您刚才发送了地理位置信息。Location_X：{0}，Location_Y：{1}，Precision： {2}",
-                    e.Xml.Latitude, e.Xml.Longitude,
+                Description = string.Format("Longitude: {0}, Latitude: {1}, Precision: {2}",
+                    e.Xml.Longitude, e.Xml.Latitude,
                     e.Xml.Precision),
                 PicUrl = mapUrl,
                 Url = mapUrl
@@ -377,7 +361,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             _logger.LogTrace(ex.InnerException ?? ex, ex.InnerException?.Message ?? ex.Message);
         }
 
-        var echo = $"点击了子菜单按钮({e.Xml.FromUserName}): {e.Xml.EventKey}";
+        var echo = $"EventKey: {e.Xml.EventKey}";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
@@ -399,7 +383,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             _logger.LogTrace(ex.InnerException ?? ex, ex.InnerException?.Message ?? ex.Message);
         }
 
-        var echo = $"点击了子菜单按钮({e.Xml.FromUserName}): {e.Xml.EventKeyAsUrl()}";
+        var echo = $"EventKey: {e.Xml.EventKey}";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
@@ -433,7 +417,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             _logger.LogTrace(ex.InnerException ?? ex, ex.InnerException?.Message ?? ex.Message);
         }
 
-        var echo = $"Unsubscribe({e.Xml.FromUserName})";
+        var echo = $"";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
@@ -455,7 +439,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             _logger.LogTrace(ex.InnerException ?? ex, ex.InnerException?.Message ?? ex.Message);
         }
 
-        var echo = $"QrscanEvent({e.Xml.FromUserName}: {e.Xml.EventKeyAsScene()}, {e.Xml.Ticket})";
+        var echo = $"EventKey: {e.Xml.EventKey}, Ticket: {e.Xml.Ticket}";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
@@ -471,7 +455,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             var subscriber = await _subscriberStore.FindByOpenIdAsync(e.Xml.FromUserName);
             if (subscriber == null)
             {
-                subscriber = new TWeixinSubscriberEntity
+                subscriber = new WeixinSubscriberEntity
                 {
                     OpenId = e.Xml.FromUserName,
                     SubscribeTime = DateTimeOffset.Now.ToUnixTime(),
@@ -496,7 +480,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             _logger.LogTrace(ex.InnerException ?? ex, ex.InnerException?.Message ?? ex.Message);
         }
 
-        var echo = $"Subscribe({e.Xml.FromUserName}: {e.Xml.EventKeyAsScene()}, {e.Xml.Ticket})";
+        var echo = $"EventKey: {e.Xml.EventKey}, Ticket: {e.Xml.Ticket}";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
@@ -518,7 +502,7 @@ public class DemoWeixinEventSink<TWeixinSubscriberEntity, TKey> : WeixinTraceEve
             _logger.LogTrace(ex.InnerException ?? ex, ex.InnerException?.Message ?? ex.Message);
         }
 
-        var echo = $"Enter({e.Xml.FromUserName})";
+        var echo = $"";
         await ResponseWithText(e.Context, e.Xml, echo);
         return true;
     }
