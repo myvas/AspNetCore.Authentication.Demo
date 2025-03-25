@@ -22,7 +22,7 @@ try
 
     var app = builder.ConfigureServices()
         .MigrateDatabase()
-        .SeedDatabase()
+        .SeedDatabase("demo", "demo@myvas.com")
         .ConfigurePipeline();
 
     app.Run();
@@ -35,6 +35,6 @@ catch (Exception ex)
 }
 finally
 {
-    Log.Information($"{assemblyName} {assemblyVersion} shutdown.");
+    Log.Information($"{assemblyName} v{assemblyVersion} shutdown.");
     Log.CloseAndFlush();
 }
