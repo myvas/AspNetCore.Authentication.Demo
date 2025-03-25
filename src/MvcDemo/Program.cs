@@ -20,7 +20,7 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    var app = builder.ConfigureServices()
+    var app = builder.ConfigureServices().Build()
         .MigrateDatabase()
         .SeedDatabase("demo", "demo@myvas.com")
         .ConfigurePipeline();
