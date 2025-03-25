@@ -1,13 +1,13 @@
-﻿@model IEnumerable<MessageReceivedEntry>
+﻿@model ReturnableViewModel<IEnumerable<MessageReceivedEntry>>
 
 @{
     ViewData["Title"] = "Received Text";
 }
 
-<h2>@ViewData["Title"] (@Model.Count())</h2>
+<h2>@ViewData["Title"] (@Model.Item.Count())</h2>
 
 
-@foreach (var item in Model.Where(x => x is TextMessageReceivedEntry).Select(x => x as TextMessageReceivedEntry).ToList())
+@foreach (var item in Model.Item.Where(x => x is TextMessageReceivedEntry).Select(x => x as TextMessageReceivedEntry).ToList())
 {
     //if (itemEntry is TextMessageReceivedEntry item)
     {
