@@ -12,7 +12,7 @@ namespace Demo;
 
 public static class HostExtensions
 {
-    public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
         var Configuration = builder.Configuration;
 
@@ -91,6 +91,7 @@ public static class HostExtensions
         {
             o.Configuration = Configuration.GetConnectionString("RedisConnection");
         })
+        .AddJsapiTicketRedisCacheProvider()
         .AddWeixinSite(o =>
         {
             o.Debug = true; // for this demo for debugging
@@ -105,7 +106,7 @@ public static class HostExtensions
         })
         .AddWeixinEventSink<DemoEventSink>();
 
-        return builder.Build();
+        return builder;
     }
 
     public static WebApplication ConfigurePipeline(this WebApplication app)
