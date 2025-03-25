@@ -50,6 +50,7 @@ jobs:
       - name: Save the SSH private key to a file
         run: |
           if [ ! -f ~/.ssh/id_rsa ]; then
+            echo "Save the SSH private key to a file"
             mkdir -p ~/.ssh
             echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
@@ -58,6 +59,7 @@ jobs:
       - name: Add remote server to known_hosts
         run: |
           if ! grep -q "${{ env.SSH_HOST }}" ~/.ssh/known_hosts; then
+            echo "Add remote server to known_hosts"
             ssh-keyscan ${{ env.SSH_HOST }} >> ~/.ssh/known_hosts
           fi
 
