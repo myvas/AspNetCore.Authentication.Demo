@@ -38,12 +38,22 @@ else
 					<dd>
 						<div class="text-truncate" style="width:150px;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="@item.OpenId">@item.OpenId</div>
 					</dd>
+					<dt>UnionId</dt>
+					<dd>@item.UnionId</dd>
 					<dt>Province</dt>
 					<dd>@item.Province</dd>
 					<dt>City</dt>
 					<dd>@item.City</dd>
-					<dt>Subscribe Time</dt>
-					<dd>@item.SubscribeTime?.ToString("yyyy-MM-dd HH:mm:ss")</dd>
+					@if(item.SubscribeTime.HasValue)
+					{
+						<dt>Subscribe Time</dt>
+						<dd>@(new UnixDateTime(item.SubscribeTime??0).DateTime.ToString("yyyy-MM-dd HH:mm:ss"))</dd>
+					}					
+					@if(!item.Subscribed && item.UnsubscribeTime.HasValue)
+					{
+						<dt>Unsubscribe Time</dt>
+						<dd>@(new UnixDateTime(item.UnsubscribeTime??0).DateTime.ToString("yyyy-MM-dd HH:mm:ss"))</dd>
+					}
 				</dl>
 				<a asp-action="SendWeixin" asp-route-openid="@item.OpenId">发送微信消息</a>
 			</div>
