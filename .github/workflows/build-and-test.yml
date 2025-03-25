@@ -4,8 +4,6 @@
 name: build-and-test (reusable workflow)
 permissions:
   contents: read
-  pull-requests: write
-
 on:
   workflow_call:
     inputs:
