@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Demo.Migrations
 {
     /// <inheritdoc />
-    public partial class V2 : Migration
+    public partial class V3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,42 +23,51 @@ namespace Demo.Migrations
                 table: "WeixinSubscribers");
 
             migrationBuilder.DropColumn(
-                name: "CreateUnixTime",
-                table: "WeixinSubscribers");
-
-            migrationBuilder.DropColumn(
                 name: "RowVersion",
                 table: "WeixinSubscribers");
 
-            migrationBuilder.RenameColumn(
-                name: "Gender",
-                table: "WeixinSubscribers",
-                newName: "Sex");
+            migrationBuilder.DropColumn(
+                name: "CreateUnixTime",
+                table: "WeixinReceivedMessages");
+
+            migrationBuilder.DropColumn(
+                name: "CreateUnixTime",
+                table: "WeixinReceivedEvents");
 
             migrationBuilder.RenameColumn(
-                name: "NickName",
+                name: "UnsubscribedTime",
                 table: "WeixinSubscribers",
-                newName: "Nickname");
-
-            migrationBuilder.RenameColumn(
-                name: "AvatorImageUrl",
-                table: "WeixinSubscribers",
-                newName: "HeadImgUrl");
-                
-            migrationBuilder.RenameColumn(
-                name: "SubscribedTime",
-                table: "WeixinSubscribers",
-                newName: "SubscribeTime");
+                newName: "SecurityStamp");
 
             migrationBuilder.RenameColumn(
                 name: "Unsubscribed",
                 table: "WeixinSubscribers",
                 newName: "Subscribed");
-                
+
             migrationBuilder.RenameColumn(
-                name: "UnsubscribedTime",
+                name: "SubscribedTime",
+                table: "WeixinSubscribers",
+                newName: "HeadImgUrl");
+
+            migrationBuilder.RenameColumn(
+                name: "Gender",
                 table: "WeixinSubscribers",
                 newName: "UnsubscribeTime");
+
+            migrationBuilder.RenameColumn(
+                name: "AvatorImageUrl",
+                table: "WeixinSubscribers",
+                newName: "ConcurrencyStamp");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "OpenId",
+                table: "WeixinSubscribers",
+                type: "TEXT",
+                maxLength: 32,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldMaxLength: 32);
 
             migrationBuilder.AddColumn<string>(
                 name: "Id",
@@ -67,27 +76,101 @@ namespace Demo.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.AddColumn<string>(
-                name: "SecurityStamp",
+            migrationBuilder.AddColumn<int>(
+                name: "Sex",
                 table: "WeixinSubscribers",
-                type: "TEXT",
+                type: "INTEGER",
                 nullable: true);
-                
+
+            migrationBuilder.AddColumn<long>(
+                name: "SubscribeTime",
+                table: "WeixinSubscribers",
+                type: "INTEGER",
+                nullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "ToUserName",
+                table: "WeixinReceivedMessages",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldMaxLength: 32);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "MsgType",
+                table: "WeixinReceivedMessages",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT");
+
+            migrationBuilder.AlterColumn<long>(
+                name: "MsgId",
+                table: "WeixinReceivedMessages",
+                type: "INTEGER",
+                nullable: true,
+                oldClrType: typeof(long),
+                oldType: "INTEGER");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "FromUserName",
+                table: "WeixinReceivedMessages",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldMaxLength: 32);
+
             migrationBuilder.AddColumn<string>(
                 name: "ConcurrencyStamp",
-                table: "WeixinSubscribers",
+                table: "WeixinReceivedMessages",
                 type: "TEXT",
                 nullable: true);
-                
+
             migrationBuilder.AddColumn<long>(
                 name: "CreateTime",
                 table: "WeixinReceivedMessages",
                 type: "INTEGER",
                 nullable: true);
 
+            migrationBuilder.AlterColumn<string>(
+                name: "ToUserName",
+                table: "WeixinReceivedEvents",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldMaxLength: 32);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "MsgType",
+                table: "WeixinReceivedEvents",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "FromUserName",
+                table: "WeixinReceivedEvents",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldMaxLength: 32);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Event",
+                table: "WeixinReceivedEvents",
+                type: "TEXT",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "TEXT");
+
             migrationBuilder.AddColumn<string>(
                 name: "ConcurrencyStamp",
-                table: "WeixinReceivedMessages",
+                table: "WeixinReceivedEvents",
                 type: "TEXT",
                 nullable: true);
 
@@ -95,12 +178,6 @@ namespace Demo.Migrations
                 name: "CreateTime",
                 table: "WeixinReceivedEvents",
                 type: "INTEGER",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "ConcurrencyStamp",
-                table: "WeixinReceivedEvents",
-                type: "TEXT",
                 nullable: true);
 
             migrationBuilder.AddPrimaryKey(
@@ -173,34 +250,70 @@ namespace Demo.Migrations
                 name: "PK_WeixinSubscribers",
                 table: "WeixinSubscribers");
 
-            migrationBuilder.RenameColumn(
-                name: "Sex",
-                table: "WeixinSubscribers",
-                newName: "Gender");
+            migrationBuilder.DropColumn(
+                name: "Id",
+                table: "WeixinSubscribers");
 
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
+                name: "Sex",
+                table: "WeixinSubscribers");
+
+            migrationBuilder.DropColumn(
                 name: "SubscribeTime",
-                table: "WeixinSubscribers",
-                newName: "SubscribedTime");
+                table: "WeixinSubscribers");
+
+            migrationBuilder.DropColumn(
+                name: "ConcurrencyStamp",
+                table: "WeixinReceivedMessages");
+
+            migrationBuilder.DropColumn(
+                name: "CreateTime",
+                table: "WeixinReceivedMessages");
+
+            migrationBuilder.DropColumn(
+                name: "ConcurrencyStamp",
+                table: "WeixinReceivedEvents");
+
+            migrationBuilder.DropColumn(
+                name: "CreateTime",
+                table: "WeixinReceivedEvents");
 
             migrationBuilder.RenameColumn(
                 name: "UnsubscribeTime",
                 table: "WeixinSubscribers",
-                newName: "UnsubscribedTime");
+                newName: "Gender");
 
             migrationBuilder.RenameColumn(
                 name: "Subscribed",
                 table: "WeixinSubscribers",
                 newName: "Unsubscribed");
 
-            migrationBuilder.DropColumn(
+            migrationBuilder.RenameColumn(
                 name: "SecurityStamp",
-                table: "WeixinSubscribers");
+                table: "WeixinSubscribers",
+                newName: "UnsubscribedTime");
 
             migrationBuilder.RenameColumn(
                 name: "HeadImgUrl",
                 table: "WeixinSubscribers",
+                newName: "SubscribedTime");
+
+            migrationBuilder.RenameColumn(
+                name: "ConcurrencyStamp",
+                table: "WeixinSubscribers",
                 newName: "AvatorImageUrl");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "OpenId",
+                table: "WeixinSubscribers",
+                type: "TEXT",
+                maxLength: 32,
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldMaxLength: 32,
+                oldNullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "AppId",
@@ -215,12 +328,96 @@ namespace Demo.Migrations
                 rowVersion: true,
                 nullable: true);
 
+            migrationBuilder.AlterColumn<string>(
+                name: "ToUserName",
+                table: "WeixinReceivedMessages",
+                type: "TEXT",
+                maxLength: 32,
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "MsgType",
+                table: "WeixinReceivedMessages",
+                type: "TEXT",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<long>(
+                name: "MsgId",
+                table: "WeixinReceivedMessages",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: 0L,
+                oldClrType: typeof(long),
+                oldType: "INTEGER",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "FromUserName",
+                table: "WeixinReceivedMessages",
+                type: "TEXT",
+                maxLength: 32,
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldNullable: true);
+
             migrationBuilder.AddColumn<long>(
                 name: "CreateUnixTime",
                 table: "WeixinReceivedMessages",
                 type: "INTEGER",
                 nullable: false,
                 defaultValue: 0L);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "ToUserName",
+                table: "WeixinReceivedEvents",
+                type: "TEXT",
+                maxLength: 32,
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "MsgType",
+                table: "WeixinReceivedEvents",
+                type: "TEXT",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "FromUserName",
+                table: "WeixinReceivedEvents",
+                type: "TEXT",
+                maxLength: 32,
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Event",
+                table: "WeixinReceivedEvents",
+                type: "TEXT",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "TEXT",
+                oldNullable: true);
 
             migrationBuilder.AddColumn<long>(
                 name: "CreateUnixTime",

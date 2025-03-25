@@ -12,16 +12,17 @@ Log.Logger = new LoggerConfiguration()
 
 var assembly = typeof(Program).Assembly;
 var assemblyName = assembly.GetName().Name;
-var assemblyVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-Log.Information($"{assemblyName} {assemblyVersion} starting up...");
+var assemblyVersion = assembly.GetName().Version?.ToString()
+    ?? assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+Log.Information($"{assemblyName} v{assemblyVersion} starting up...");
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    var app = builder.ConfigureServices()
+    var app = builder.ConfigureServices().Build()
         .MigrateDatabase()
-        .SeedDatabase()
+        .SeedDatabase("demo", "demo@myvas.com")
         .ConfigurePipeline();
 
     app.Run();
@@ -34,6 +35,6 @@ catch (Exception ex)
 }
 finally
 {
-    Log.Information($"{assemblyName} {assemblyVersion} shutdown.");
+    Log.Information($"{assemblyName} v{assemblyVersion} shutdown.");
     Log.CloseAndFlush();
 }
