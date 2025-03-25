@@ -12,8 +12,9 @@ Log.Logger = new LoggerConfiguration()
 
 var assembly = typeof(Program).Assembly;
 var assemblyName = assembly.GetName().Name;
-var assemblyVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-Log.Information($"{assemblyName} {assemblyVersion} starting up...");
+var assemblyVersion = assembly.GetName().Version?.ToString()
+    ?? assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+Log.Information($"{assemblyName} v{assemblyVersion} starting up...");
 
 try
 {

@@ -1,16 +1,17 @@
 ﻿@using System.Reflection
 @{
-    ViewData["Title"] = "Demo";
-
     var assembly = typeof(Program).Assembly;
     var assemblyName = assembly.GetName().Name;
-    var assemblyVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
-        ?? assembly.GetName().Version.ToString();
+    var assemblyVersion = assembly.GetName().Version?.ToString()
+        ?? assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+
+    ViewData["Title"] = assemblyName;
 }
 
-<h2 title="Myvas.AspNetCore.Authentication.Demo">@ViewData["Title"] <small>@(assemblyVersion)</small></h2>
+<h2 title="Myvas.AspNetCore.Authentication.Demo">@assemblyName v<small>@assemblyVersion</small></h2>
 
-<p>这是一组github开源项目的演示网站。本网站源代码在此：<a href="https://github.com/myvas/AspNetCore.Authentication.Demo.git">Myvas.AspNetCore.Authentication.Demo</a></p>
+<p>这是一组github开源项目的演示网站。本网站源代码在此：<a
+        href="https://github.com/myvas/AspNetCore.Authentication.Demo.git">Myvas.AspNetCore.Authentication.Demo</a></p>
 <ul>
     <li>WeixinOpen (open.weixin.qq.com)</li>
     <li>WeixinAuth (mp.weixin.qq.com)</li>
@@ -24,12 +25,14 @@
 <h3>触发身份验证</h3>
 <p>(1)点击<a asp-action="UserInfo">UserInfo</a>触发Challenge进入登录页面。</p>
 <p>--- 或 ---</p>
-<p>(2)点击<a asp-action="ShowQrcode" asp-route-redirectUrl="@Url.AbsoluteAction("UserInfo","Home")">这里</a>展示一个网址二维码，用手机扫码进入。</p>
+<p>(2)点击<a asp-action="ShowQrcode"
+        asp-route-redirectUrl="@Url.AbsoluteAction("UserInfo", "Home")">这里</a>展示一个网址二维码，用手机扫码进入。</p>
 <p>--- 或 ---</p>
 (3)直接扫码进入微信公众号测试，然后点击菜单[UserInfo]
 <p>
     <img src="~/img/mp-test.jpg" height="300" />
-    <div class="help-block">（注：以上微信公众号的源码在<a href="https://github.com/myvas/Weixin">Myvas.AspNetCore.Weixin</a>，其<a href="http://wx.myvas.com">Demo程序</a>可以修改这些菜单）</div>
+<div class="help-block">（注：以上微信公众号的源码在<a href="https://github.com/myvas/Weixin">Myvas.AspNetCore.Weixin</a>，其<a
+        href="http://wx.myvas.com">Demo程序</a>可以修改这些菜单）</div>
 </p>
 <hr />
 
@@ -76,5 +79,6 @@
 </dl>
 
 <footer class="footer">
-    <div class="text-muted">Copyright &copy; @(DateTime.Now.Year) 广州市境迁咨询服务有限公司 <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow" class="text-muted">粤ICP备17119791号</a></div>
+    <div class="text-muted">Copyright &copy; @(DateTime.Now.Year) 广州市境迁咨询服务有限公司 <a href="http://beian.miit.gov.cn/"
+            target="_blank" rel="nofollow" class="text-muted">粤ICP备17119791号</a></div>
 </footer>
