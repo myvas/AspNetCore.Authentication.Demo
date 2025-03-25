@@ -1,48 +1,52 @@
-﻿@model IEnumerable<MessageReceivedEntry>
+﻿@model ReturnableViewModel<IList<WeixinReceivedMessageEntity>>
 
 @{
     ViewData["Title"] = "Received Text";
 }
 
-<h2>@ViewData["Title"] (@Model.Count())</h2>
+<h2>@ViewData["Title"] (@Model.Item.Count())</h2>
 
 
-@foreach (var item in Model.Where(x => x is TextMessageReceivedEntry).Select(x => x as TextMessageReceivedEntry).ToList())
+@foreach (var item in Model.Item)
 {
-    //if (itemEntry is TextMessageReceivedEntry item)
-    {
-        <div class="media">
-            @*<img class="mr-3" src="@item.headimgurl" style="width:64px;" />*@
-            <div class="media-body">
-                @*<h5 class="mt-0">
-                    <span>@item.From</span>
-                    @{
-                    switch (item.sex)
-                    {
-                    case 1:
-                    <i class="fas fa-mars text-primary"></i>
-                    break;
-                    case 2:
-                    <i class="fas fa-venus text-danger"></i>
-                    break;
-                    default:
-                    break;
-                    }
-                    }
-                    </h5>*@
-                <dl class="dl-horizontal">
-                    <dt>OpenId</dt>
-                    <dd>
-                        <div class="text-truncate" style="width:150px;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="@item.FromUserName">@item.FromUserName</div>
-                    </dd>
+    <div class="media">
+        <div class="media-body">
+            <dl class="dl-horizontal">
+                <dt>OpenId</dt>
+                <dd>
+                    <div class="text-truncate" style="width:150px;" data-container="body" data-toggle="popover"
+                        data-placement="bottom" data-content="@item.FromUserName">@item.FromUserName</div>
+                </dd>
+                @if (!string.IsNullOrEmpty(item.Content))
+                {
                     <dt>Content</dt>
                     <dd>@item.Content</dd>
-                    <dt>Received Time</dt>
-                    <dd>@item.GetCreateTime()?.ToLocalTime().ToString("yyyy-MM-dd hh:mm:ss")</dd>
-                </dl>
-                <a asp-action="SendWeixin" asp-route-openid="@item.FromUserName">发送微信消息</a>
-            </div>
+                }
+                @if(!string.IsNullOrEmpty(item.Url))
+                {
+                    <dt>Url</dt>
+                    <dd>@item.Url</dd>
+                }
+                @if(!string.IsNullOrEmpty(item.PicUrl))
+                {
+                    <dt>PicUrl</dt>
+                    <dd>@item.PicUrl</dd>
+                }
+                @if(!string.IsNullOrEmpty(item.MediaId))
+                {
+                    <dt>media Id</dt>
+                    <dd>@item.MediaId</dd>
+                }
+                @if(!string.IsNullOrEmpty(item.ThumbMediaId))
+                {
+                    <dt>mThumbmedia Id</dt>
+                    <dd>@item.ThumbMediaId</dd>
+                }
+                <dt>Received Time</dt>
+                <dd>@(new UnixDateTime(item.CreateTime ?? 0).DateTime.ToLocalTime().ToString("yyyy-MM-dd hh:mm:ss"))</dd>
+            </dl>
+            <a asp-action="SendWeixin" asp-route-openid="@item.FromUserName">发送微信消息</a>
         </div>
-        <hr />
-    }
+    </div>
+    <hr />
 }
