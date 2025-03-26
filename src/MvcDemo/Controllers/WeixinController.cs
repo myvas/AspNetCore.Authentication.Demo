@@ -16,7 +16,8 @@ namespace Demo.Controllers
         private readonly IWeixinUserApi _api;
         private readonly IWeixinCustomerSupportApi _csApi;
         private readonly IWeixinSubscriberStore _subscriberStore;
-        private readonly IWeixinResponseMessageStore<WeixinResponseMessageEntity> _messageStore;
+        private readonly IWeixinResponseMessageStore<WeixinResponseMessageEntity> _responseStore;
+        private readonly IWeixinReceivedMessageStore<WeixinReceivedMessageEntity> _messageStore;
         private readonly IWeixinReceivedEventStore<WeixinReceivedEventEntity> _eventStore;
 
         public WeixinController(
@@ -24,13 +25,15 @@ namespace Demo.Controllers
             IWeixinUserApi api,
             IWeixinCustomerSupportApi csApi,
             IWeixinSubscriberStore subscriberStore,
-            IWeixinResponseMessageStore<WeixinResponseMessageEntity> messageStore,
+            IWeixinResponseMessageStore<WeixinResponseMessageEntity> responseStore,
+            IWeixinReceivedMessageStore<WeixinReceivedMessageEntity> messageStore,
             IWeixinReceivedEventStore<WeixinReceivedEventEntity> eventStore)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _api = api;
             _csApi = csApi;
             _subscriberStore = subscriberStore ?? throw new ArgumentNullException(nameof(subscriberStore));
+            _responseStore=responseStore ?? throw new ArgumentNullException(nameof(responseStore));
             _messageStore = messageStore ?? throw new ArgumentNullException(nameof(messageStore));
             _eventStore = eventStore ?? throw new ArgumentNullException(nameof(eventStore));
         }
@@ -61,6 +64,7 @@ namespace Demo.Controllers
             var subscribers = await _subscriberStore.GetItemsAsync(pageSize, pageIndex);
             _logger.LogDebug($"微信订阅者在数据库中共{totalRecords}条记录。");
             vm.Item = subscribers;
+            vm.ReturnUrl=Url.Action(nameof(Subscribers), new { n });
 
             return View(vm);
         }
@@ -81,9 +85,10 @@ namespace Demo.Controllers
 
             var pageIndex = n.Value - 1;
 
-            var items = await _messageStore.GetItemsAsync(pageSize, pageIndex);
+            vm.Item = await _messageStore.GetItemsAsync(pageSize, pageIndex);
+            vm.ReturnUrl = Url.Action(nameof(ReceivedText), new { n });
             _logger.LogDebug($"微信文本消息在数据库中共{totalRecords}条记录。");
-            return View(items);
+            return View(vm);
         }
 
         public async Task<IActionResult> SendWeixin(string openId)
@@ -95,7 +100,7 @@ namespace Demo.Controllers
 
             var vm = new SendWeixinViewModel
             {
-                Received = await _messageStore.Items.Where(x => x.ToUserName == openId).ToListAsync(),
+                Responsed = await _responseStore.Items.Where(x => x.ToUserName == openId).ToListAsync(),
                 OpenId = openId
             };
             return View(vm);

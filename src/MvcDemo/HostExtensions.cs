@@ -1,3 +1,6 @@
+using System;
+using System.Diagnostics;
+using System.Reflection;
 using Demo.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -5,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Myvas.AspNetCore.Authentication;
 using Myvas.AspNetCore.Weixin;
 
@@ -14,6 +18,21 @@ public static class HostExtensions
 {
     public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
+        Debug.WriteLine("Create a temporary logger for me.");
+        // Build a temporary logger for me.
+        using var loggerFactory = LoggerFactory.Create(logging =>
+        {
+            logging.AddConsole();
+#if DEBUG
+            logging.SetMinimumLevel(LogLevel.Trace);
+#else
+            logging.SetMinimumLevel(LogLevel.Information);
+#endif
+        });
+        var logger = loggerFactory.CreateLogger<WebApplicationBuilder>();
+        logger.LogDebug($"{MethodBase.GetCurrentMethod().Name}...");
+        logger.LogInformation("Environment=" + builder.Environment.EnvironmentName);
+
         var Configuration = builder.Configuration;
 
         builder.Services.AddControllersWithViews();
@@ -47,6 +66,10 @@ public static class HostExtensions
             o.AccessDeniedPath = "/Identity/Account/AccessDenied";
         });
 
+        logger?.LogInformation("WeixinOpen:AppId=" + Configuration["WeixinOpen:AppId"]);
+        logger?.LogInformation("WeixinAuth:AppId=" + Configuration["WeixinAuth:AppId"]);
+        logger?.LogInformation("QQConnect:AppId=" + Configuration["QQConnect:AppId"]);
+
         builder.Services.AddAuthentication()
         .AddWeixinOpen(o =>
         {
@@ -74,6 +97,8 @@ public static class HostExtensions
                 QQConnectScopes.do_like);
         });
 
+        logger?.LogInformation("TencensSms:SdkAppId=" + Configuration["TencentSms:SdkAppId"]);
+
         builder.Services.AddTencentSms(o =>
         {
             o.SdkAppId = Configuration["TencentSms:SdkAppId"];
@@ -81,6 +106,8 @@ public static class HostExtensions
         });
 
         builder.Services.AddViewDivert();
+
+        logger?.LogInformation("Weixin:AppId=" + Configuration["Weixin:AppId"]);
 
         builder.Services.AddWeixin(o =>
         {
@@ -111,6 +138,10 @@ public static class HostExtensions
 
     public static WebApplication ConfigurePipeline(this WebApplication app)
     {
+        var logger = app.Logger;
+        logger.LogTrace($"{MethodBase.GetCurrentMethod().Name}...");
+        logger.LogInformation($"Environment={app.Environment.EnvironmentName}");
+
         var env = app.Environment;
         if (env.IsDevelopment())
         {
@@ -124,6 +155,8 @@ public static class HostExtensions
         }
         //app.UseHttpsRedirection();
         app.UseStaticFiles();
+
+        logger.LogTrace("UseWeixinSite...");
         app.UseWeixinSite();
 
         app.UseRouting();

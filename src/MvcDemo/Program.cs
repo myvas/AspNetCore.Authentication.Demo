@@ -2,23 +2,26 @@ using Demo;
 using Demo.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
-using Serilog;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Reflection;
-
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateLogger();
 
 var assembly = typeof(Program).Assembly;
 var assemblyName = assembly.GetName().Name;
 var assemblyVersion = assembly.GetName().Version?.ToString()
     ?? assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-Log.Information($"{assemblyName} v{assemblyVersion} starting up...");
+Console.WriteLine($"{assemblyName} v{assemblyVersion} starting up...");
 
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+
+    // Set default logging level.
+#if DEBUG
+    builder.Logging.SetMinimumLevel(LogLevel.Trace);
+#else
+    builder.Logging.SetMinimumLevel(LogLevel.Information);
+#endif
 
     var app = builder.ConfigureServices().Build()
         .MigrateDatabase()
@@ -29,12 +32,10 @@ try
 }
 catch (Exception ex)
 {
-    // Any unhandled exception during start-up will be caught and flushed to
-    // our log file or centralized log server
-    Log.Fatal(ex, "Host terminated for an unhandled exception occured.");
+    Console.WriteLine($"{assemblyName} v{assemblyVersion} terminated for an unhandled exception occured.");
+    Console.WriteLine(ex);
 }
 finally
 {
-    Log.Information($"{assemblyName} v{assemblyVersion} shutdown.");
-    Log.CloseAndFlush();
+    Console.WriteLine($"{assemblyName} v{assemblyVersion} shutdown.");
 }
