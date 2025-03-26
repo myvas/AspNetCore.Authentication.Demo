@@ -25,7 +25,7 @@ public static class HostExtensions
 #if DEBUG
             logging.SetMinimumLevel(LogLevel.Trace);
 #else
-            logging.SetMinimumLevel(LogLevel.Information);
+            logging.SetMinimumLevel(LogLevel.Debug);
 #endif
         });
         var logger = loggerFactory.CreateLogger<WebApplicationBuilder>();
