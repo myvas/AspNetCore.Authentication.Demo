@@ -16,8 +16,12 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    // Set default logging level to the most detailed level
+    // Set default logging level.
+#if DEBUG
     builder.Logging.SetMinimumLevel(LogLevel.Trace);
+#else
+    builder.Logging.SetMinimumLevel(LogLevel.Information);
+#endif
 
     var app = builder.ConfigureServices().Build()
         .MigrateDatabase()
