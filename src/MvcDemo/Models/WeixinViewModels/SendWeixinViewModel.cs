@@ -7,7 +7,7 @@ namespace Demo.Models
 {
     public class SendWeixinViewModel
     {
-        public IEnumerable<WeixinResponseMessageEntity> Received { get; set; }
+        public IEnumerable<WeixinResponseMessageEntity> Responsed { get; set; }
 
         [Required]
         public string OpenId { get; set; }
