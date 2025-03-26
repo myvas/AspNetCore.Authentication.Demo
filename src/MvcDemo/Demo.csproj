@@ -28,7 +28,6 @@
 		<PackageReference Include="Myvas.AspNetCore.TencentSms" Version="9.0.*" />
 		<PackageReference Include="Myvas.AspNetCore.ViewDivert" Version="9.0.*" />
 		<PackageReference Include="Myvas.AspNetCore.Weixin" Version="9.0.0-rc.6" />
-		<PackageReference Include="Serilog.AspNetCore" Version="9.0.*" />
 	</ItemGroup>
 
 </Project>
